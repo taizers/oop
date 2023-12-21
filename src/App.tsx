@@ -4,10 +4,10 @@ import { Routes, Route, Link } from 'react-router-dom';
 
 import Login from './components/Login';
 import SignUp from './containers/SignUp';
-import Users from './containers/Users';
-import User from './containers/User';
-import Books from './containers/Books';
-import Book from './containers/Book';
+import Employees from './containers/Employees';
+import Employee from './components/Employee';
+import Companies from './containers/Companies';
+import Company from './components/Company/Company';
 import { getToken } from './utils/index';
 import LayOut from './components/Layout';
 import RequireAuth from './components/RequireAuth';
@@ -56,29 +56,16 @@ const App: FC = () => {
         {/* protected routes */}
         <Route element={<RequireAuth />}>
           <Route path={'profile'} element={<Profile />} />
-          <Route path={'books'} element={<Books />} />
-          <Route path={'books/:id'} element={<Book />} />
-          <Route path={'users'} element={<Users />} />
-          <Route path={'users/:id'} element={<User />} />
+          <Route path={'companies'} element={<Companies />} />
+          <Route path={'companies/:id'} element={<Company />} />
+          <Route path={'employees'} element={<Employees />} />
+          <Route path={'employees/:id'} element={<Employee />} />
         </Route>
 
         {/* Not Found route */}
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
-    // <StyledApp>
-    //   <Routes>
-    //     <Route path='/login' element={<PublicRoute component={<Login />}/>} />
-    //     <Route path='/signUp' element={<PublicRoute component={<SignUp />}/>} />
-    //     <Route path='/users' element={<PrivateRoute component={<Users />}/>} />
-    //     <Route path='/users/:id' element={<PrivateRoute component={<SingleUser />}/>} />
-    //     <Route path='/profile' element={<PrivateRoute component={<Profile />}/>} />
-    //     <Route path='/books' element={<PrivateRoute component={<Books />}/>} />
-    //     <Route path='/books/:id' element={<PrivateRoute component={<Book />}/>} />
-    //     <Route path="/*" element={<PrivateRoute component={<Main />}/>} />
-    //   </Routes>
-    //   <Toaster position="bottom-right" reverseOrder={false} />
-    // </StyledApp>
   );
 };
 

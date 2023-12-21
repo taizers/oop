@@ -12,8 +12,8 @@ import { UserType } from '../constants/tsSchemes';
 import { usersApiSlice } from '../store/reducers/UsersApiSlice';
 import { useShowErrorToast } from '../hooks';
 
-const User: FC = () => {
-  let { id } = useParams();
+const Employee: FC = () => {
+  const { id } = useParams();
   const { data: user, error, isLoading } = usersApiSlice.useGetUserQuery(id);
 
   useShowErrorToast(error);
@@ -54,4 +54,4 @@ const User: FC = () => {
   );
 };
 
-export default User;
+export default Employee;

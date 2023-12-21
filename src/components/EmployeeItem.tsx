@@ -7,12 +7,12 @@ import Typography from '@mui/material/Typography';
 import Image from './Image/Image';
 import { AuthorRType } from '../constants/tsSchemes';
 
-type AuthorItemType = {
-  authors: AuthorRType;
+type EmployeeItemType = {
+  employee: AuthorRType;
 };
 
-const AuthorItem: FC<AuthorItemType> = ({ authors }) => {
-  const { cover, title, author, categories } = authors;
+const EmployeeItem: FC<EmployeeItemType> = ({ employee }) => {
+  const { cover, title, author, categories } = employee;
 
   return (
     <ListItem
@@ -81,4 +81,4 @@ const AuthorItem: FC<AuthorItemType> = ({ authors }) => {
   );
 };
 
-export default AuthorItem;
+export default EmployeeItem;

@@ -10,13 +10,13 @@ import Pagination from '@mui/material/Pagination';
 // import FormControl from '@mui/material/FormControl';
 // import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-import BookItem from '../components/BookItem/BookItem';
 import { BooksResponceType, BookType } from '../constants/tsSchemes';
 import { defaultLimit, defaultStartPage } from '../constants/constants';
 import { remoteBooksApiSlice } from '../store/reducers/RemoteBooksApiSlice';
 import { useDebounce, useShowErrorToast } from '../hooks';
+import CompanyItem from '../components/CompanyItem';
 
-const Books: FC = () => {
+const Companies: FC = () => {
   const [query, setQuery] = useState<string>('');
   const [page, setPage] = useState<number>(defaultStartPage);
   const [limit, setLimit] = useState<number>(defaultLimit);
@@ -125,7 +125,7 @@ const Books: FC = () => {
             }}
           >
             {books.items.map((book: BookType, index: number) => (
-              <BookItem book={book} key={`book ${index}`} />
+              <CompanyItem book={book} key={`book ${index}`} />
             ))}
           </List>
         )}
@@ -160,4 +160,4 @@ const Books: FC = () => {
   );
 };
 
-export default Books;
+export default Companies;

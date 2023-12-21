@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { Outlet } from 'react-router-dom';
-import { Box, Typography } from '@mui/material';
 import { Toaster } from 'react-hot-toast';
 import { StyledApp } from '../styled';
 import SideBar from './Sidebar/Sidebar';

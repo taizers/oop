@@ -17,7 +17,7 @@ import { defaultStartPage, defaultLimit } from '../constants/constants';
 import { usersApiSlice } from '../store/reducers/UsersApiSlice';
 import { useAppSelector, useShowErrorToast } from '../hooks';
 
-const Users: FC = () => {
+const Employees: FC = () => {
   const history = useNavigate();
   const [page, setPage] = useState<number>(defaultStartPage);
   const [limit, setLimit] = useState<number>(defaultLimit);
@@ -128,4 +128,4 @@ const Users: FC = () => {
   );
 };
 
-export default Users;
+export default Employees;
