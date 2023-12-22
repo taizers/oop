@@ -3,7 +3,7 @@ import moment from 'moment';
 
 const EmployeesAvatarsStorage = multer.diskStorage({
   destination(req, file, callback) {
-    callback(null, 'storage/avatars/');
+    callback(null, 'storage/employees/avatars/');
   },
   filename(req, file, callback) {
     const date = moment().format('DDMMYYYY-HHmmss_SSS');
@@ -14,7 +14,7 @@ const EmployeesAvatarsStorage = multer.diskStorage({
 
 const CompaniesAvatarsStorage = multer.diskStorage({
   destination(req, file, callback) {
-    callback(null, 'storage/avatars/');
+    callback(null, 'storage/companies/avatars/');
   },
   filename(req, file, callback) {
     const date = moment().format('DDMMYYYY-HHmmss_SSS');

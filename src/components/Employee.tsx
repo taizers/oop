@@ -1,20 +1,21 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useParams } from 'react-router-dom';
 
-import { UserType } from '../constants/tsSchemes';
-import { usersApiSlice } from '../store/reducers/UsersApiSlice';
+import { employeesApiSlice } from '../store/reducers/EmployeesApiSlice';
 import { useShowErrorToast } from '../hooks';
+import Image from './Image/Image';
+import { apiUrl, separtor } from '../constants/constants';
 
 const Employee: FC = () => {
   const { id } = useParams();
-  const { data: user, error, isLoading } = usersApiSlice.useGetUserQuery(id);
+  const { data: employee, error, isLoading } = employeesApiSlice.useGetEmployeeQuery(id);
+
+  const { avatar, name, age, adress, courses, education, foreign_level } = employee;
 
   useShowErrorToast(error);
 
@@ -29,25 +30,61 @@ const Employee: FC = () => {
         }}
       >
         <Typography component="h1" variant="h5">
-          Информация о пользователе
+          Информация о сотруднике
         </Typography>
         <Avatar sx={{ m: 4, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
+          <Image
+            src={
+              avatar
+                ? `${apiUrl}${avatar}`
+                : `/static/images/NoCover.jpg`
+            }
+            alt="Employee avatar"
+          />
         </Avatar>
-
         <Box component="form" sx={{ mt: 1 }}>
           <Typography component="h3" variant="h5">
-            ID: {user?.id}
+            ID: {id}
           </Typography>
           <Typography component="h3" variant="h5">
-            Почта: {user?.email}
+            Имя: {name}
           </Typography>
           <Typography component="h3" variant="h5">
-            Имя: {user?.name}
+            Дата рождения: {age}
           </Typography>
           <Typography component="h3" variant="h5">
-            Удалён: {user?.deleted_at ? 'Да' : 'Нет'}
+            Адрес проживания: {adress}
           </Typography>
+          <Typography component="h3" variant="h5">
+            Образование:
+          </Typography>
+          {
+            education.split(separtor).map((item: string, index: number) => (
+              <Typography key={index} component="h4" variant="h6">
+                {item}
+              </Typography>
+            ))
+          }
+          <Typography component="h3" variant="h5">
+            Иностранные языки:
+          </Typography>
+          {
+            foreign_level.split(separtor).map((item: string, index: number) => (
+              <Typography key={index} component="h4" variant="h6">
+                {item}
+              </Typography>
+            ))
+          }
+          <Typography component="h3" variant="h5">
+            Курсы:
+          </Typography>
+          {
+            courses.split(separtor).map((item: string, index: number) => (
+              <Typography key={index} component="h4" variant="h6">
+                {item}
+              </Typography>
+            ))
+          }
         </Box>
       </Box>
     </Container>

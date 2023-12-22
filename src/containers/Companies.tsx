@@ -10,11 +10,11 @@ import Pagination from '@mui/material/Pagination';
 // import FormControl from '@mui/material/FormControl';
 // import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-import { BooksResponceType, BookType } from '../constants/tsSchemes';
+import { CompanyType } from '../types/entities';
 import { defaultLimit, defaultStartPage } from '../constants/constants';
 import { remoteBooksApiSlice } from '../store/reducers/RemoteBooksApiSlice';
 import { useDebounce, useShowErrorToast } from '../hooks';
-import CompanyItem from '../components/CompanyItem';
+import CompanyItem from '../components/CompanyItem/CompanyItem';
 
 const Companies: FC = () => {
   const [query, setQuery] = useState<string>('');
@@ -24,7 +24,7 @@ const Companies: FC = () => {
 
   // const [queryType, setQueryType] = useState('');
   const {
-    data: books,
+    data: companies,
     error,
     isLoading,
   } = remoteBooksApiSlice.useGetBooksQuery({
@@ -35,7 +35,7 @@ const Companies: FC = () => {
 
   useShowErrorToast(error);
 
-  const booksCount = books?.items?.length;
+  const companiesCount = companies?.items?.length;
 
   useEffect(() => {
     if (query) {
@@ -61,10 +61,6 @@ const Companies: FC = () => {
     setPage(value - 1);
   };
 
-  // const onSelectChange = (event: SelectChangeEvent) => {
-  //     setQueryType(event.target.value);
-  // };
-
   return (
     <Box sx={{ width: '100%' }}>
       <Box
@@ -84,23 +80,6 @@ const Companies: FC = () => {
           autoFocus
           onChange={(e: any) => setQuery(e.currentTarget.value)}
         />
-        {/* <FormControl sx={{minWidth: '20%', ml: 1}} margin="normal">
-                    <InputLabel id="select-type-query-label">Тип</InputLabel>
-                    <Select
-                    required
-                    labelId="select-type-query-label"
-                    id="demo-simple-select-autowidth"
-                    value={queryType}
-                    onChange={onSelectChange}
-                    autoWidth
-                    label="Тип"
-                    >
-                        <MenuItem value={'books'}>Книги</MenuItem>
-                        <MenuItem value={'authors'}>Авторы</MenuItem>
-                        <MenuItem value={'series'}>Серии</MenuItem>
-                        <MenuItem value={'genres'}>Жанры</MenuItem>
-                    </Select>
-                </FormControl> */}
         <Button
           type="submit"
           fullWidth
@@ -113,7 +92,7 @@ const Companies: FC = () => {
       <Box
         sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
       >
-        {booksCount && (
+        {companiesCount && (
           <List
             sx={{
               display: 'flex',
@@ -124,12 +103,12 @@ const Companies: FC = () => {
               bgcolor: 'background.paper',
             }}
           >
-            {books.items.map((book: BookType, index: number) => (
-              <CompanyItem book={book} key={`book ${index}`} />
+            {companies.items.map((company: CompanyType, index: number) => (
+              <CompanyItem company={company} key={`book ${index}`} />
             ))}
           </List>
         )}
-        {!booksCount && (
+        {!companiesCount && (
           <Typography
             sx={{
               display: 'flex',
@@ -145,9 +124,9 @@ const Companies: FC = () => {
             {'Нет данных'}
           </Typography>
         )}
-        {booksCount && (
+        {companiesCount && (
           <Pagination
-            count={books.totalPages}
+            count={companies.totalPages}
             color="primary"
             defaultPage={1}
             boundaryCount={2}

@@ -14,6 +14,15 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DataTypes.DATE,
       },
+      ceo: {
+        allowNull: false,
+        type: Sequelize.DataTypes.STRING,
+      },
+      avatar: {
+        allowNull: true,
+        defaultValue: null,
+        type: Sequelize.DataTypes.STRING,
+      },
       location: {
         allowNull: false,
         type: Sequelize.DataTypes.STRING,

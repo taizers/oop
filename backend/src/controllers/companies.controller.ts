@@ -27,11 +27,12 @@ export const createCompanyAction = async (
   next: NextFunction
 ) => {
   const payload = req.body;
+  const filename = req.file?.filename;
 
-  logger.info(`Create Company Action: { payload: ${payload} }`);
+  logger.info(`Create Company Action: { payload: ${payload} avatar: ${filename} }`);
 
   try {
-    const company = await createCompany(payload);
+    const company = await createCompany({...payload, avatar: filename || null});
     
     res.status(200).json(company);
   } catch (error) {

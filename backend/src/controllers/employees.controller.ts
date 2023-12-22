@@ -27,11 +27,12 @@ export const createEmployeeAction = async (
   next: NextFunction
 ) => {
   const payload = req.body;
+  const filename = req.file?.filename;
 
-  logger.info(`Create Employee Action: { payload: ${payload} }`);
+  logger.info(`Create Employee Action: { payload: ${payload} avatar: ${filename}  }`);
 
   try {
-    const employee = await createEmployee(payload);
+    const employee = await createEmployee({...payload, avatar: filename || null});
     
     res.status(200).json(employee);
   } catch (error) {

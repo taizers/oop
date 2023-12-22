@@ -16,7 +16,16 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      avatar: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: null
+      },
       scope: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      ceo: {
         type: DataTypes.STRING,
         allowNull: false,
       },

@@ -5,14 +5,15 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Typography from '@mui/material/Typography';
 
 import Image from './Image/Image';
-import { AuthorRType } from '../constants/tsSchemes';
+import { EmployeeType } from '../types/entities';
+import { apiUrl, separtor } from '../constants/constants';
 
 type EmployeeItemType = {
-  employee: AuthorRType;
+  employee: EmployeeType;
 };
 
 const EmployeeItem: FC<EmployeeItemType> = ({ employee }) => {
-  const { cover, title, author, categories } = employee;
+  const { avatar, name, age, education, foreign_level } = employee;
 
   return (
     <ListItem
@@ -22,16 +23,16 @@ const EmployeeItem: FC<EmployeeItemType> = ({ employee }) => {
       <ListItemAvatar>
         <Image
           src={
-            cover
-              ? `http://flibusta.site/${cover}`
+            avatar
+              ? `${apiUrl}${avatar}`
               : `/static/images/NoCover.jpg`
           }
-          alt="Book cover"
+          alt="Employee avatar"
         />
       </ListItemAvatar>
       <ListItemText
         sx={{ ml: 1 }}
-        primary={title}
+        primary={name}
         secondary={
           <>
             <Typography
@@ -41,9 +42,9 @@ const EmployeeItem: FC<EmployeeItemType> = ({ employee }) => {
               color="text.primary"
               key={'author title'}
             >
-              Авторы:
+              Образование:
             </Typography>
-            {author.map((item, index) => (
+            {education.split(separtor).map((item, index) => (
               <Typography
                 sx={{ display: 'flex', flexDirection: 'column' }}
                 component="span"
@@ -51,7 +52,7 @@ const EmployeeItem: FC<EmployeeItemType> = ({ employee }) => {
                 color="text.primary"
                 key={`author ${index}`}
               >
-                {item.name}
+                {item}
               </Typography>
             ))}
             <Typography
@@ -61,15 +62,24 @@ const EmployeeItem: FC<EmployeeItemType> = ({ employee }) => {
               color="text.primary"
               key={'cotegory title'}
             >
-              Жанры:
+              Дата рождения: {age}
             </Typography>
-            {categories.map((item, index) => (
+            <Typography
+              sx={{ display: 'flex', flexDirection: 'column', mt: 1 }}
+              component="span"
+              variant="body2"
+              color="text.primary"
+              key={'cotegory title'}
+            >
+              Иностранные языки:
+            </Typography>
+            {foreign_level.split(separtor).map((item, index) => (
               <Typography
                 sx={{ display: 'flex', flexDirection: 'column' }}
                 component="span"
                 variant="body2"
-                color="text.secondary"
-                key={`category ${index}`}
+                color="text.primary"
+                key={`author ${index}`}
               >
                 {item}
               </Typography>

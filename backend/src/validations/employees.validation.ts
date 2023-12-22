@@ -1,15 +1,16 @@
 import { Joi, validate } from 'express-validation';
 
-export const createSeriaValidation = validate(
+export const createEmployeeValidation = validate(
   {
     body: Joi.object({
-      title: Joi.string().max(512).required(),
-      author: Joi.string().max(512),
-      tags: Joi.string().max(512),
-      categories: Joi.string().max(512),
-      releaseDate: Joi.date(),
-      cover: Joi.string(),
-      annotation: Joi.string().max(1024),
+      name: Joi.string().max(512).required(),
+      courses: Joi.string().max(512),
+      education: Joi.string().max(512),
+      adress: Joi.string().max(255),
+      foreign_level: Joi.string().max(10),
+      company_id: Joi.number(),
+      age: Joi.date(),
+      avatar: Joi.string().max(255),
     }),
   },
   {
@@ -23,13 +24,14 @@ export const createSeriaValidation = validate(
 export const updateSeriaValidation = validate(
   {
     body: Joi.object({
-      title: Joi.string().max(512),
-      author: Joi.string().max(512),
-      tags: Joi.string().max(512),
-      categories: Joi.string().max(512),
-      releaseDate: Joi.date(),
-      cover: Joi.string(),
-      annotation: Joi.string().max(1024),
+      name: Joi.string().max(512).required(),
+      courses: Joi.string().max(512),
+      education: Joi.string().max(512),
+      adress: Joi.string().max(255),
+      foreign_level: Joi.string().max(10),
+      company_id: Joi.number(),
+      age: Joi.date(),
+      avatar: Joi.string().max(255),
     }),
     params: Joi.object({
       id: Joi.string().required(),

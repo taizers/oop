@@ -2,22 +2,26 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import { editPath } from '../utils/path';
-import { UserType } from '../types/global/entities';
+import { CompanyType } from '../types/global/entities';
 
-export default class UserDto {
+export default class CompanyDto {
   id;
-  email;
+  age;
   name;
   avatar;
-  role;
+  location;
+  scope;
+  ceo;
   created_at;
   updated_at;
   deleted_at;
 
-  constructor(model: UserType) {
+  constructor(model: CompanyType) {
     this.id = model.id;
-    this.email = model.email;
-    this.role = model.role;
+    this.age = model.age;
+    this.location = model.location;
+    this.scope = model.scope;
+    this.ceo = model.ceo;
     this.avatar = model.avatar && editPath(model.avatar);
     this.name = model.name;
     this.created_at = model.created_at;

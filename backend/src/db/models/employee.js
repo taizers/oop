@@ -12,11 +12,12 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      qualification: {
+      avatar: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
+        defaultValue: null
       },
-      universities: {
+      education: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -24,7 +25,7 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      english_level: {
+      foreign_level: {
         type: DataTypes.STRING,
         allowNull: false,
       },

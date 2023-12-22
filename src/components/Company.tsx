@@ -5,12 +5,17 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { useParams } from 'react-router-dom';
+import { companiesApiSlice } from '../store/reducers/CompaniesApiSlice';
+import { apiUrl } from '../constants/constants';
+import Image from './Image/Image';
 
-type CompanyItemType = {
-    company: any;
-};
+const Company: FC = () => {
+  const { id } = useParams();
+  const { data: company, error, isLoading } = companiesApiSlice.useGetCompanyQuery(id);
 
-const CompanyItem: FC<CompanyItemType> = ({company}) => {
+  const { avatar, name, age, location } = company;
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -25,26 +30,33 @@ const CompanyItem: FC<CompanyItemType> = ({company}) => {
           Информация о компании
         </Typography>
         <Avatar sx={{ m: 4, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
+          <Image
+            src={
+              avatar
+                ? `${apiUrl}${avatar}`
+                : `/static/images/NoCover.jpg`
+            }
+            alt="Employee avatar"
+          />
         </Avatar>
 
         <Box component="form" sx={{ mt: 1 }}>
           <Typography component="h3" variant="h5">
-            ID: {company?.id}
+            ID: {id}
           </Typography>
           <Typography component="h3" variant="h5">
-            Почта: {company?.name}
+            Название: {name}
           </Typography>
           <Typography component="h3" variant="h5">
-            Имя: {company?.age}
+            Дата основания: {age}
           </Typography>
-          {company?.deleted_at && <Typography component="h3" variant="h5">
-            Удалена
-          </Typography>}
+          <Typography component="h3" variant="h5">
+            Адрес: {location}
+          </Typography>
         </Box>
       </Box>
     </Container>
   );
 };
 
-export default CompanyItem;
+export default Company;

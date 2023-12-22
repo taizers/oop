@@ -23,9 +23,15 @@ import verifyToken from '../middlewares/auth.middleware';
 const router = express.Router();
 
 router.use(
-  '/storage/avatars',
+  '/storage/companies/avatars',
   verifyToken,
-  express.static('storage/avatars')
+  express.static('/storage/companies/avatars')
+);
+
+router.use(
+  '/storage/employees/avatars',
+  verifyToken,
+  express.static('/storage/employees/avatars')
 );
 
 // Authorization

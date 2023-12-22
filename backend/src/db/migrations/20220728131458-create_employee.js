@@ -27,11 +27,12 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DataTypes.DATE,
       },
-      qualification: {
-        allowNull: false,
+      avatar: {
+        allowNull: true,
+        defaultValue: null,
         type: Sequelize.DataTypes.STRING,
       },
-      universities: {
+      education: {
         allowNull: false,
         type: Sequelize.DataTypes.STRING,
       },
@@ -39,7 +40,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DataTypes.STRING,
       },
-      english_level: {
+      foreign_level: {
         allowNull: false,
         type: Sequelize.DataTypes.STRING,
       },

@@ -10,10 +10,19 @@
 //     }
 // }
 
+
 declare module "jsonwebtoken" {
     export interface JwtPayload {
         id: string;
     }
 }
+
+declare namespace Express {
+    export interface Request {
+       file?: {
+        filename: string;
+       }
+    }
+ }
 
 export {}

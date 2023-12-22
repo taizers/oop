@@ -1,24 +1,20 @@
+
 import React, { FC } from 'react';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
-import DownloadIcon from '@mui/icons-material/Download';
-import Button from '@mui/material/Button';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import { useParams } from 'react-router-dom';
 
 import { StyledListItemAvatar } from './styled';
 import Image from '../Image/Image';
-import { BookType } from '../../constants/tsSchemes';
-import { usersApiSlice } from '../../store/reducers/UsersApiSlice';
+import { CompanyType } from '../../types/entities';
+import { apiUrl } from '../../constants/constants';
 
-type CompanyType = {
-  book: BookType;
+type CompanyItemType = {
+  company: CompanyType;
 };
 
-const Company: FC = () => {
-  const { id } = useParams();
-  const { data: company, error, isLoading } = usersApiSlice.useGetUserQuery(id);
+const CompanyItem: FC<CompanyItemType> = ({company}) => {
+  const { avatar, name, age, location } = company;
 
   return (
     <ListItem
@@ -33,8 +29,8 @@ const Company: FC = () => {
       <StyledListItemAvatar>
         <Image
           src={
-            company.avatar
-              ? `http://flibusta.site/${company.avatar}`
+            avatar
+              ? `${apiUrl}${avatar}`
               : `/static/images/no-image.png`
           }
           alt="Company avatar"
@@ -42,7 +38,7 @@ const Company: FC = () => {
       </StyledListItemAvatar>
       <ListItemText
         sx={{ ml: 1 }}
-        primary={company.name}
+        primary={name}
         secondary={
           <>
             <Typography
@@ -52,7 +48,7 @@ const Company: FC = () => {
               color="text.primary"
               key={'author title'}
             >
-              Дата основания компании: {company.age}
+              Дата основания компании: {age}
             </Typography>
             <Typography
               sx={{ display: 'flex', flexDirection: 'column', mt: 1 }}
@@ -61,7 +57,7 @@ const Company: FC = () => {
               color="text.primary"
               key={'cotegory title'}
             >
-              Основатель: {company.creator}
+              Адрес: {location}
             </Typography>
           </>
         }
@@ -70,4 +66,4 @@ const Company: FC = () => {
   );
 };
 
-export default Company;
+export default CompanyItem;
