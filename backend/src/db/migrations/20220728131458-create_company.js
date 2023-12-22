@@ -3,20 +3,11 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('employees', {
+    return queryInterface.createTable('companies', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.DataTypes.INTEGER,
-      },
-      company_id: {
-        allowNull: true,
-        defaultValue: null,
-        references: {
-          model: 'companies',
-          key: 'id',
-        },
         type: Sequelize.DataTypes.INTEGER,
       },
       name: {
@@ -27,24 +18,20 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DataTypes.DATE,
       },
+      ceo: {
+        allowNull: false,
+        type: Sequelize.DataTypes.STRING,
+      },
       avatar: {
         allowNull: true,
         defaultValue: null,
         type: Sequelize.DataTypes.STRING,
       },
-      education: {
+      location: {
         allowNull: false,
         type: Sequelize.DataTypes.STRING,
       },
-      courses: {
-        allowNull: false,
-        type: Sequelize.DataTypes.STRING,
-      },
-      foreign_level: {
-        allowNull: false,
-        type: Sequelize.DataTypes.STRING,
-      },
-      adress: {
+      scope: {
         allowNull: false,
         type: Sequelize.DataTypes.STRING,
       },
@@ -65,6 +52,6 @@ module.exports = {
   },
 
   down: (queryInterface) => {
-    return queryInterface.dropTable('employees');
+    return queryInterface.dropTable('companies');
   },
 };

@@ -1,20 +1,18 @@
-import { NextFunction, Response, Request } from 'express';
+import { NextFunction, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { customResponse } from '../helpers/responce';
 import { getUser, createUser } from '../services/db/users.services';
 import {
-  signUpRequest,
-  loginRequest,
-  requestWithCookiesToken,
+  SignUpRequest,
+  LoginRequest,
+  RequestWithCookiesToken,
 } from '../types/requests/auth.request.type';
-import { UserSessionType } from '../types/entities/global.entities.type';
 import logger from '../helpers/logger';
 import { ResourceNotFoundError, BadCredentialsError, ApplicationError, UnAuthorizedError } from '../helpers/error';
 import UserDto from '../dtos/user.dto';
 import { generateTokens, saveToken, validateRefreshToken, findToken, removeToken } from '../services/db/token.services';
 
 const getUserSession = async (userData: {id: string, role?: string}) => {
-  console.log(userData);
   const session = generateTokens(userData);
 
   await saveToken(userData?.id, session.refresh_token);
@@ -23,7 +21,7 @@ const getUserSession = async (userData: {id: string, role?: string}) => {
 };
 
 export const signUpAction = async (
-  req: signUpRequest,
+  req: SignUpRequest,
   res: Response,
   next: NextFunction
 ) => {
@@ -47,7 +45,7 @@ export const signUpAction = async (
   const encryptedPassword = await bcrypt.hash(password, 10);
 
   try {
-    const user = await createUser({
+    await createUser({
       email,
       password: encryptedPassword,
       name,
@@ -62,7 +60,7 @@ export const signUpAction = async (
 };
 
 export const loginAction = async (
-  req: loginRequest,
+  req: LoginRequest,
   res: Response,
   next: NextFunction
 ) => {
@@ -101,7 +99,7 @@ export const loginAction = async (
 };
 
 export const refreshAction = async (
-  req: requestWithCookiesToken,
+  req: RequestWithCookiesToken,
   res: Response,
   next: NextFunction
 ) => {
@@ -149,7 +147,7 @@ export const refreshAction = async (
 };
 
 export const logoutAction = async (
-  req: requestWithCookiesToken,
+  req: RequestWithCookiesToken,
   res: Response,
   next: NextFunction
 ) => {

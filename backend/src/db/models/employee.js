@@ -49,7 +49,7 @@ export default (sequelize, DataTypes) => {
   );
 
   Employee.associate = (models) => {
-    Employee.belongsTo(models.Company, { onDelete: 'cascade', foreignKey: "company_id", as: 'company' });
+    Employee.belongsTo(models.Company, { onDelete: 'cascade', foreignKey: "company_id" });
   };
 
   return Employee;

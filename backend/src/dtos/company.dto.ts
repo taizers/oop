@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { editPath } from '../utils/path';
 import { CompanyType } from '../types/global/entities';
 
 export default class CompanyDto {
@@ -22,7 +21,7 @@ export default class CompanyDto {
     this.location = model.location;
     this.scope = model.scope;
     this.ceo = model.ceo;
-    this.avatar = model.avatar && editPath(model.avatar);
+    this.avatar = `storage/companies/avatars/${model.avatar}`;
     this.name = model.name;
     this.created_at = model.created_at;
     this.updated_at = model.updated_at;

@@ -1,6 +1,7 @@
 import { NextFunction, Response, Request } from 'express';
 import { getPaginatedEmployees, createEmployee, deleteEmployee, getEmployee, updateEmployee } from '../services/db/employees.services';
 import logger from '../helpers/logger';
+import fs from 'fs';
 
 export const getPaginatedEmployeesAction = async (
   req: Request,
@@ -29,7 +30,7 @@ export const createEmployeeAction = async (
   const payload = req.body;
   const filename = req.file?.filename;
 
-  logger.info(`Create Employee Action: { payload: ${payload} avatar: ${filename}  }`);
+  logger.info(`Create Employee Action: { payload: ${JSON.stringify(payload)}, avatar: ${filename}  }`);
 
   try {
     const employee = await createEmployee({...payload, avatar: filename || null});
@@ -67,13 +68,24 @@ export const updateEmployeeAction = async (
 ) => {
   const id = req.params.id;
   const payload = req.body;
+  const file = req.file?.filename;
 
-  logger.info(`Update Employee Action: { id: ${id}, payload: ${payload} }`);
+  logger.info(`Update Employee Action: { id: ${id}, payload:${JSON.stringify(payload)}, file: ${file} }`);
 
   try {
-    const employee = await updateEmployee({ id }, payload);
+    let updatedEmployee;
+
+    if (file) {
+      const company = await getEmployee({id});
+
+      fs.unlinkSync(`storage/employees/avatars/${company.avatar}`);
+
+      updatedEmployee = await updateEmployee({ id }, {...payload, avatar: file});
+    } else {
+      updatedEmployee = await updateEmployee({ id }, payload);
+    }
     
-    res.status(200).json(employee);
+    res.status(200).json(updatedEmployee);
   } catch (error) {
     logger.error('Update Employee Action - Cannot update employee', error);
     next(error);
@@ -90,6 +102,10 @@ export const deleteEmployeeAction = async (
   logger.info(`Delete Employee Action: { id: ${id} }`);
 
   try {
+    const company = await getEmployee({id});
+
+    fs.unlinkSync(`storage/employees/avatars/${company.avatar}`);
+
     await deleteEmployee(id);
     
     res.status(200).json(id);

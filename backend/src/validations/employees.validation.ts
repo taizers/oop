@@ -3,7 +3,7 @@ import { Joi, validate } from 'express-validation';
 export const createEmployeeValidation = validate(
   {
     body: Joi.object({
-      name: Joi.string().max(512).required(),
+      name: Joi.string().max(512),
       courses: Joi.string().max(512),
       education: Joi.string().max(512),
       adress: Joi.string().max(255),
@@ -21,10 +21,10 @@ export const createEmployeeValidation = validate(
   }
 );
 
-export const updateSeriaValidation = validate(
+export const updateEmployeeValidation = validate(
   {
     body: Joi.object({
-      name: Joi.string().max(512).required(),
+      name: Joi.string().max(512),
       courses: Joi.string().max(512),
       education: Joi.string().max(512),
       adress: Joi.string().max(255),
@@ -45,12 +45,12 @@ export const updateSeriaValidation = validate(
   }
 );
 
-export const getPaginatedSeriesValidation = validate(
+export const getPaginatedEmployeesValidation = validate(
   {
     query: Joi.object({
       page: Joi.number().required(),
       limit: Joi.number().required(),
-      query: Joi.string().required(),
+      query: Joi.string().allow(''),
     }),
   },
   {

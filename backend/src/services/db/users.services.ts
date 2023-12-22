@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { User } = require('../../db/models/index');
 import UserDto from '../../dtos/user.dto';
-import { UserType } from '../../types/entities/global.entities.type';
+import { UserType } from '../../types/global/entities';
 
 // const getUserForResponceWithToken = async (user:UserType) => {
 //   const userDto = new UserDto(user);
@@ -26,7 +26,7 @@ export const  getAllUsers = async (page: number, limit: number) => {
 
   const totalPages = !count ? 1 : Math.ceil(count / limit);
 
-  const usersDto = rows.map((user:UserType) => ({...new UserDto(user)}));
+  const usersDto = rows.map((user: UserType) => ({...new UserDto(user)}));
 
   return {
     totalPages,

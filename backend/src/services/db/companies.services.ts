@@ -1,7 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Company, Employee } = require('../../db/models/index');
 import { Op, fn, col } from "sequelize";
-import fs from 'fs';
 import { UnCreatedError } from "../../helpers/error";
 
 export const  getPaginatedCompanies = async (page: number, limit: number, query: string) => {
@@ -16,6 +15,7 @@ export const  getPaginatedCompanies = async (page: number, limit: number, query:
   const { count, rows } = await Company.findAndCountAll({
     offset: page * limit,
     limit,
+    subQuery: false,
     attributes: { 
       include: [[fn("COUNT", col("employees.id")), "employees_count"]] 
     },
@@ -28,6 +28,7 @@ export const  getPaginatedCompanies = async (page: number, limit: number, query:
       },
     ],
     order: [['created_at', 'DESC']],
+    group: ['company.id']
   });
 
   if (!rows.length) {
@@ -39,7 +40,7 @@ export const  getPaginatedCompanies = async (page: number, limit: number, query:
   return {
     totalPages,
     page: page + 1,
-    companys: rows,
+    companies: rows,
   };
 }
 
@@ -47,15 +48,13 @@ export const createCompany = async (payload: object) => {
   try {
     return await Company.create(payload);  
   } catch (error) {
+    console.log(error);
     throw new UnCreatedError('Компания');
   }
 };
 
 export const  getCompany = async (where: object) => {
   return await Company.findOne({ 
-    attributes: { 
-      include: [[fn("COUNT", col("employees.id")), "employees_count"]] 
-    },
     where,
     include: [
       {
@@ -78,7 +77,5 @@ export const  updateCompany = async (where: object, payload: object) => {
 }
 
 export const deleteCompany = async (id: string) => {
-  fs.rmSync(`storage/companies/avatars/${id}`, { recursive: true, force: true });
-
   await Company.destroy({ where: { id } });
 }

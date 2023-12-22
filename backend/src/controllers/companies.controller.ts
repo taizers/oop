@@ -1,6 +1,7 @@
 import { NextFunction, Response, Request } from 'express';
 import { createCompany, deleteCompany, getCompany, getPaginatedCompanies, updateCompany } from '../services/db/companies.services';
 import logger from '../helpers/logger';
+import fs from 'fs';
 
 export const getPaginatedCompaniesAction = async (
   req: Request,
@@ -29,7 +30,7 @@ export const createCompanyAction = async (
   const payload = req.body;
   const filename = req.file?.filename;
 
-  logger.info(`Create Company Action: { payload: ${payload} avatar: ${filename} }`);
+  logger.info(`Create Company Action: { payload: ${JSON.stringify(payload)}, avatar: ${filename} }`);
 
   try {
     const company = await createCompany({...payload, avatar: filename || null});
@@ -67,13 +68,24 @@ export const updateCompanyAction = async (
 ) => {
   const id = req.params.id;
   const payload = req.body;
+  const file = req.file?.filename;
 
-  logger.info(`Update Company Action: { id: ${id}, payload: ${JSON.stringify(payload)} }`);
+  logger.info(`Update Company Action: { id: ${id}, payload: ${JSON.stringify(payload)}, file: ${file} }`);
 
   try {
-    const company = await updateCompany({ id }, payload);
+    let updatedCompany;
+
+    if (file) {
+      const company = await getCompany({id});
+
+      fs.unlinkSync(`storage/companies/avatars/${company.avatar}`);
+
+      updatedCompany = await updateCompany({ id }, {...payload, avatar: file});
+    } else {
+      updatedCompany = await updateCompany({ id }, payload);
+    }
     
-    res.status(200).json(company);
+    res.status(200).json(updatedCompany);
   } catch (error) {
     logger.error('Update Company Action - Cannot update company', error);
     next(error);
@@ -90,6 +102,10 @@ export const deleteCompanyAction = async (
   logger.info(`Delete Company Action: { id: ${id} }`);
 
   try {    
+    const company = await getCompany({id});
+
+    fs.unlinkSync(`storage/companies/avatars/${company.avatar}`);
+
     await deleteCompany(id);
     
     res.status(200).json(id);

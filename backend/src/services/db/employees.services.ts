@@ -1,6 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Company, Employee } = require('../../db/models/index');
-import fs from 'fs';
 import { Op } from "sequelize";
 
 export const  getPaginatedEmployees = async (page: number, limit: number, query: string) => {
@@ -19,7 +18,7 @@ export const  getPaginatedEmployees = async (page: number, limit: number, query:
     include: [
       {
         model: Company,
-        as: 'companies',
+        as: 'company',
       },
     ],
     order: [['created_at', 'DESC']],
@@ -52,7 +51,7 @@ export const  getEmployee = async (where: object) => {
     include: [
       {
         model: Company,
-        as: 'companies',
+        as: 'company',
       },
     ],
   });
@@ -70,6 +69,5 @@ export const  updateEmployee = async (where: object, payload: object) => {
 }
 
 export const deleteEmployee = async (id: string) => {
-  fs.rmSync(`storage/companies/avatars/${id}`, { recursive: true, force: true });
   await Employee.destroy({ where: { id } });
 }

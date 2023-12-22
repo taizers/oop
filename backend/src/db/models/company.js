@@ -47,7 +47,7 @@ export default (sequelize, DataTypes) => {
 
   Company.associate = (models) => {
     // Company.belongsTo(models.User, { onDelete: 'cascade', foreignKey: "user_id" });
-    Company.hasMany(models.Employee, { onDelete: 'cascade', foreignKey: "company_id", as: 'company' });
+    Company.hasMany(models.Employee, { onDelete: 'cascade', foreignKey: "company_id"});
   };
 
   return Company;

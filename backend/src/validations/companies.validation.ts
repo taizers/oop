@@ -1,13 +1,12 @@
 import { Joi, validate } from 'express-validation';
 
-export const createBookValidation = validate(
+export const createCompanyValidation = validate(
   {
     body: Joi.object({
       name: Joi.string().max(255),
       location: Joi.string().max(512),
       scope: Joi.string().max(255),
       age: Joi.date(),
-      avatar: Joi.string().max(255),
       ceo: Joi.string().max(255),
     }),
   },
@@ -19,7 +18,7 @@ export const createBookValidation = validate(
   }
 );
 
-export const updateBookValidation = validate(
+export const updateCompanyValidation = validate(
   {
     body: Joi.object({
       name: Joi.string().max(255),
@@ -41,12 +40,12 @@ export const updateBookValidation = validate(
   }
 );
 
-export const getPaginatedBooksValidation = validate(
+export const getPaginatedCompaniesValidation = validate(
   {
     query: Joi.object({
       page: Joi.number().required(),
       limit: Joi.number().required(),
-      query: Joi.string(),
+      query: Joi.string().allow(''),
     }),
   },
   {
