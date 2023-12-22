@@ -175,11 +175,11 @@ const SideBar: FC<SideBartype> = ({ child }) => {
               )
           )}
         </List>
-        <Divider />
+        {/* <Divider />
         <List>
-          {subMenuItems.map(
+          {subMenuItems?.map(
             (item) =>
-              getAccess(item) && (
+              getAccess(item: any) && (
                 <ListItem key={item.title} disablePadding>
                   <ListItemButton
                     onClick={() => {
@@ -194,7 +194,7 @@ const SideBar: FC<SideBartype> = ({ child }) => {
                 </ListItem>
               )
           )}
-        </List>
+        </List> */}
       </Drawer>
       <Main open={open}>
         <DrawerHeader />

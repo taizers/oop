@@ -13,7 +13,7 @@ export const getPaginatedEmployeesAction = async (
   logger.info(`Get Paginated Employees Action: { page: ${page}, limit: ${limit}, query: ${query} }`);
 
   try {
-    const employees = await getPaginatedEmployees(+page-1, +limit, query?.toString());
+    const employees = await getPaginatedEmployees(+page, +limit, query?.toString());
     
     res.status(200).json(employees);
   } catch (error) {

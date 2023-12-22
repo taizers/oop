@@ -16,48 +16,36 @@ export const menuItems = [
     access: 'all',
   },
   {
-    title: Sidebar.Users,
-    path: '/users',
+    title: Sidebar.Employees,
+    path: '/employees',
     icon: GroupIcon,
-    access: 'private',
+    access: 'all',
   },
   {
-    title: Sidebar.LocalBooks,
-    path: '/local-books',
+    title: Sidebar.Companies,
+    path: '/companies',
     icon: BookmarkBorderIcon,
-    access: 'private',
-  },
-  {
-    title: Sidebar.Books,
-    path: '/books',
-    icon: MenuBookIcon,
-    access: 'private',
-  },
+    access: 'all',
+  }
 ];
 
 export const subMenuItems = [
-  {
-    title: Sidebar.Library,
-    path: '/library',
-    icon: BookIcon,
-    access: 'private',
-  },
-  {
-    title: Sidebar.Login,
-    path: '/login',
-    icon: LoginIcon,
-    access: 'public',
-  },
-  {
-    title: Sidebar.Profile,
-    path: '/profile',
-    icon: AccountCircleIcon,
-    access: 'private',
-  },
-  {
-    title: Sidebar.Logout,
-    path: '/',
-    icon: LogoutIcon,
-    access: 'private',
-  },
+  // {
+  //   title: Sidebar.Login,
+  //   path: '/login',
+  //   icon: LoginIcon,
+  //   access: 'public',
+  // },
+  // {
+  //   title: Sidebar.Profile,
+  //   path: '/profile',
+  //   icon: AccountCircleIcon,
+  //   access: 'private',
+  // },
+  // {
+  //   title: Sidebar.Logout,
+  //   path: '/',
+  //   icon: LogoutIcon,
+  //   access: 'private',
+  // },
 ];

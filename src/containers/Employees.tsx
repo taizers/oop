@@ -35,7 +35,7 @@ const Employees: FC = () => {
 
   useShowErrorToast(error);
 
-  const employeesCount = employees?.items?.length;
+  const employeesCount = employees?.employees?.length;
 
   useEffect(() => {
     if (query) {
@@ -103,8 +103,8 @@ const Employees: FC = () => {
               bgcolor: 'background.paper',
             }}
           >
-            {employees.items.map((employee: EmployeeType, index: number) => (
-              <EmployeeItem employee={employee} key={`book ${index}`} />
+            {employees.employees?.map((employee: EmployeeType, index: number) => (
+              <EmployeeItem employee={employee} key={`employee ${index}`} />
             ))}
           </List>
         )}

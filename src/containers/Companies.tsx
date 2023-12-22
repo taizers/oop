@@ -12,9 +12,9 @@ import Pagination from '@mui/material/Pagination';
 
 import { CompanyType } from '../types/entities';
 import { defaultLimit, defaultStartPage } from '../constants/constants';
-import { remoteBooksApiSlice } from '../store/reducers/RemoteBooksApiSlice';
 import { useDebounce, useShowErrorToast } from '../hooks';
 import CompanyItem from '../components/CompanyItem/CompanyItem';
+import { companiesApiSlice } from '../store/reducers/CompaniesApiSlice';
 
 const Companies: FC = () => {
   const [query, setQuery] = useState<string>('');
@@ -27,7 +27,7 @@ const Companies: FC = () => {
     data: companies,
     error,
     isLoading,
-  } = remoteBooksApiSlice.useGetBooksQuery({
+  } = companiesApiSlice.useGetCompaniesQuery({
     page,
     limit,
     query: debouncedValue,
@@ -35,7 +35,7 @@ const Companies: FC = () => {
 
   useShowErrorToast(error);
 
-  const companiesCount = companies?.items?.length;
+  const companiesCount = companies?.companies?.length;
 
   useEffect(() => {
     if (query) {
@@ -103,8 +103,8 @@ const Companies: FC = () => {
               bgcolor: 'background.paper',
             }}
           >
-            {companies.items.map((company: CompanyType, index: number) => (
-              <CompanyItem company={company} key={`book ${index}`} />
+            {companies.companies?.map((company: CompanyType, index: number) => (
+              <CompanyItem company={company} key={`companies ${index}`} />
             ))}
           </List>
         )}

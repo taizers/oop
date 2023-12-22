@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { localLogout, setUserToken, setUserData } from '../reducers/AuthSlice';
 import { apiUrl } from '../../constants/constants';
 import { clearToken, getToken, setToken } from '../../utils';

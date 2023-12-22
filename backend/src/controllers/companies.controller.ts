@@ -13,7 +13,7 @@ export const getPaginatedCompaniesAction = async (
   logger.info(`Get Paginated Companies Action: { page: ${page}, limit: ${limit}, query: ${query} }`);
 
   try {
-    const Companies = await getPaginatedCompanies(+page-1, +limit, query?.toString());
+    const Companies = await getPaginatedCompanies(+page, +limit, query?.toString());
     
     res.status(200).json(Companies);
   } catch (error) {

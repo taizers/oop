@@ -18,19 +18,17 @@ import express from 'express';
 import companiesRouter from './companies.routes';
 import employeesRouter from './employees.routes';
 
-import verifyToken from '../middlewares/auth.middleware';
+// import verifyToken from '../middlewares/auth.middleware';
 
 const router = express.Router();
 
 router.use(
   '/storage/companies/avatars',
-  verifyToken,
   express.static('/storage/companies/avatars')
 );
 
 router.use(
   '/storage/employees/avatars',
-  verifyToken,
   express.static('/storage/employees/avatars')
 );
 
