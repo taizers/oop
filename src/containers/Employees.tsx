@@ -14,15 +14,17 @@ import { EmployeeType } from '../types/entities';
 import { defaultLimit, defaultStartPage } from '../constants/constants';
 import { employeesApiSlice } from '../store/reducers/EmployeesApiSlice';
 import { useDebounce, useShowErrorToast } from '../hooks';
-import EmployeeItem from '../components/EmployeeItem';
+import EmployeeItem from '../components/EmployeeItem/EmployeeItem';
+import EmployeeModal from './EmployeeModal';
 
 const Employees: FC = () => {
   const [query, setQuery] = useState<string>('');
   const [page, setPage] = useState<number>(defaultStartPage);
   const [limit, setLimit] = useState<number>(defaultLimit);
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const debouncedValue = useDebounce(query);
 
-  // const [queryType, setQueryType] = useState('');
+  const [createEmployee, { data: createdData, error: creatingError, isLoading: creatingIsLoading }] = employeesApiSlice.useCreateEmployeeMutation();
   const {
     data: employees,
     error,
@@ -34,6 +36,8 @@ const Employees: FC = () => {
   });
 
   useShowErrorToast(error);
+  useShowErrorToast(creatingError);
+  console.log(employees)
 
   const employeesCount = employees?.employees?.length;
 
@@ -42,6 +46,12 @@ const Employees: FC = () => {
       setPage(defaultStartPage);
     }
   }, [query]);
+
+  useEffect(() => {
+    if (createdData) {
+      setModalOpen(false);
+    }
+  }, [createdData]);
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -60,6 +70,10 @@ const Employees: FC = () => {
     }
     setPage(value - 1);
   };
+
+  const onOpenModal = () => {
+    setModalOpen(true)
+  }
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -87,6 +101,15 @@ const Employees: FC = () => {
           sx={{ ml: 3, mt: '16px', mb: '8px', width: '20%' }}
         >
           Найти
+        </Button>
+        <Button
+          type="button"
+          fullWidth
+          variant="contained"
+          onClick={onOpenModal}
+          sx={{ ml: 3, mt: '16px', mb: '8px', width: '20%' }}
+        >
+          Создать
         </Button>
       </Box>
       <Box
@@ -135,6 +158,7 @@ const Employees: FC = () => {
           />
         )}
       </Box>
+      {isModalOpen && <EmployeeModal isModalOpen={isModalOpen} setModalOpen={setModalOpen} type='create' mutationFunction={createEmployee} />}
     </Box>
   );
 };

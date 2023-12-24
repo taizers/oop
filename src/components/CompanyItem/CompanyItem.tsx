@@ -8,6 +8,7 @@ import { StyledListItemAvatar } from './styled';
 import Image from '../Image/Image';
 import { CompanyType } from '../../types/entities';
 import { apiUrl } from '../../constants/constants';
+import moment from 'moment';
 
 type CompanyItemType = {
   company: CompanyType;
@@ -38,7 +39,7 @@ const CompanyItem: FC<CompanyItemType> = ({company}) => {
       </StyledListItemAvatar>
       <ListItemText
         sx={{ ml: 1 }}
-        primary={name}
+        primary={`Название ${name}`}
         secondary={
           <>
             <Typography
@@ -48,7 +49,7 @@ const CompanyItem: FC<CompanyItemType> = ({company}) => {
               color="text.primary"
               key={'author title'}
             >
-              Дата основания компании: {age}
+              Дата основания компании: {moment(age).format("DD.MM.YYYY")}
             </Typography>
             <Typography
               sx={{ display: 'flex', flexDirection: 'column', mt: 1 }}

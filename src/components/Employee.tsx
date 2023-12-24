@@ -1,5 +1,4 @@
-import React, { FC } from 'react';
-import Avatar from '@mui/material/Avatar';
+import React, { FC, useState } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -10,17 +9,26 @@ import { employeesApiSlice } from '../store/reducers/EmployeesApiSlice';
 import { useShowErrorToast } from '../hooks';
 import Image from './Image/Image';
 import { apiUrl, separtor } from '../constants/constants';
+import moment from 'moment';
+import { Button } from '@mui/material';
+import EmployeeModal from '../containers/EmployeeModal';
 
 const Employee: FC = () => {
   const { id } = useParams();
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
+
+  const [updateEmployee, { data: updatedData, error: updatinError, isLoading: updatinIsLoading }] = employeesApiSlice.useUpdateEmployeeMutation();
   const { data: employee, error, isLoading } = employeesApiSlice.useGetEmployeeQuery(id);
 
-  const { avatar, name, age, adress, courses, education, foreign_level } = employee;
-
   useShowErrorToast(error);
+  useShowErrorToast(updatinError);
+
+  const onOpenModal = () => {
+    setModalOpen(true)
+  }
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="div" maxWidth="xs">
       <CssBaseline />
       <Box
         sx={{
@@ -32,34 +40,32 @@ const Employee: FC = () => {
         <Typography component="h1" variant="h5">
           Информация о сотруднике
         </Typography>
-        <Avatar sx={{ m: 4, bgcolor: 'secondary.main' }}>
-          <Image
-            src={
-              avatar
-                ? `${apiUrl}${avatar}`
-                : `/static/images/NoCover.jpg`
-            }
-            alt="Employee avatar"
-          />
-        </Avatar>
+        <Image
+          src={
+            employee?.avatar
+              ? `${apiUrl}${employee.avatar}`
+              : `/static/images/no-image.png`
+          }
+          alt="Employee avatar"
+        />
         <Box component="form" sx={{ mt: 1 }}>
           <Typography component="h3" variant="h5">
             ID: {id}
           </Typography>
           <Typography component="h3" variant="h5">
-            Имя: {name}
+            Имя: {employee?.name}
           </Typography>
           <Typography component="h3" variant="h5">
-            Дата рождения: {age}
+            Дата рождения: {moment(employee?.age).format("DD.MM.YYYY")}
           </Typography>
           <Typography component="h3" variant="h5">
-            Адрес проживания: {adress}
+            Адрес проживания: {employee?.adress}
           </Typography>
           <Typography component="h3" variant="h5">
             Образование:
           </Typography>
           {
-            education.split(separtor).map((item: string, index: number) => (
+            employee?.education.split(separtor).map((item: string, index: number) => (
               <Typography key={index} component="h4" variant="h6">
                 {item}
               </Typography>
@@ -69,7 +75,7 @@ const Employee: FC = () => {
             Иностранные языки:
           </Typography>
           {
-            foreign_level.split(separtor).map((item: string, index: number) => (
+            employee?.foreign_level.split(separtor).map((item: string, index: number) => (
               <Typography key={index} component="h4" variant="h6">
                 {item}
               </Typography>
@@ -79,14 +85,25 @@ const Employee: FC = () => {
             Курсы:
           </Typography>
           {
-            courses.split(separtor).map((item: string, index: number) => (
+            employee?.courses.split(separtor).map((item: string, index: number) => (
               <Typography key={index} component="h4" variant="h6">
                 {item}
               </Typography>
             ))
           }
         </Box>
+        <Button
+          type="button"
+          fullWidth
+          variant="contained"
+          onClick={onOpenModal}
+          sx={{ ml: 3, mt: '16px', mb: '8px', width: '35%', alignSelf: 'center' }}
+        >
+          Обновить
+        </Button>
       </Box>
+
+      {isModalOpen && employee && <EmployeeModal isModalOpen={isModalOpen} employee={employee} setModalOpen={setModalOpen} type='update' mutationFunction={updateEmployee} />}
     </Container>
   );
 };

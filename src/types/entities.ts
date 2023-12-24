@@ -20,12 +20,13 @@ export type CompanyType = {
     created_at: Date;
     updated_at: Date;
     deleted_at: Date | null;
+    employees: Array<EmployeeType> | null;
 };
 
 export type EmployeeType = {
     id: number;
     name: string;
-    age: string;
+    age: Date;
     education: string;
     courses: string;
     foreign_level: string;
@@ -35,4 +36,5 @@ export type EmployeeType = {
     created_at: Date;
     updated_at: Date;
     deleted_at: Date | null;
+    company: CompanyType | null;
 };

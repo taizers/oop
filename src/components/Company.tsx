@@ -34,7 +34,7 @@ const Company: FC = () => {
             src={
               avatar
                 ? `${apiUrl}${avatar}`
-                : `/static/images/NoCover.jpg`
+                : `/static/images/no-image.png`
             }
             alt="Employee avatar"
           />
