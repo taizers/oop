@@ -47,7 +47,6 @@ const UpdateUserModal: FC<UpdateUserModalType> = ({ user }) => {
       return console.log('Empty');
     }
 
-    console.log({ id: user.id, user: { name, oldPassword, newPassword } });
     updateUser({ id: user.id, user: { name, oldPassword, newPassword } });
   };
 

@@ -3,31 +3,45 @@ import React, { FC } from 'react';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
+import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 
 import { StyledListItemAvatar } from './styled';
 import Image from '../Image/Image';
 import { CompanyType } from '../../types/entities';
 import { apiUrl } from '../../constants/constants';
-import moment from 'moment';
 
 type CompanyItemType = {
   company: CompanyType;
+  hasLink?: boolean;
 };
 
-const CompanyItem: FC<CompanyItemType> = ({company}) => {
-  const { avatar, name, age, location } = company;
+const CompanyItem: FC<CompanyItemType> = ({company, hasLink = true}) => {
+  let history = useNavigate();
+  const { id, avatar, name, age, location, employees_count } = company;
 
+  const onItemClick = () => {
+    hasLink && history(`/companies/${id}`);
+  }
+  
   return (
     <ListItem
-      sx={{ 
-        flexGrow: 1,
-        flexBasis: 500,
-        bgcolor: '#cad2de',
-        display: 'flex',
-        justifySelf: 'center'
+    alignItems="flex-start"
+    onClick={onItemClick}
+    sx={{ 
+      maxWidth: 500, 
+      bgcolor: '#f0f0fc',
+       mb: 1,
+      '@media (max-width: 900px)': {
+        flexDirection: 'column'
+      }  
       }}
     >
-      <StyledListItemAvatar>
+      <StyledListItemAvatar sx={{
+        '@media (max-width: 900px)': {
+          alignSelf: 'center'
+        } 
+      }}>
         <Image
           src={
             avatar
@@ -39,7 +53,7 @@ const CompanyItem: FC<CompanyItemType> = ({company}) => {
       </StyledListItemAvatar>
       <ListItemText
         sx={{ ml: 1 }}
-        primary={`Название ${name}`}
+        primary={`Название: ${name}`}
         secondary={
           <>
             <Typography
@@ -47,7 +61,7 @@ const CompanyItem: FC<CompanyItemType> = ({company}) => {
               component="span"
               variant="body2"
               color="text.primary"
-              key={'author title'}
+              key={'date'}
             >
               Дата основания компании: {moment(age).format("DD.MM.YYYY")}
             </Typography>
@@ -56,9 +70,18 @@ const CompanyItem: FC<CompanyItemType> = ({company}) => {
               component="span"
               variant="body2"
               color="text.primary"
-              key={'cotegory title'}
+              key={'adress'}
             >
-              Адрес: {location}
+              Юридитеский адрес: {location}
+            </Typography>
+            <Typography
+              sx={{ display: 'flex', flexDirection: 'column', mt: 1 }}
+              component="span"
+              variant="body2"
+              color="text.primary"
+              key={'employees count'}
+            >
+              Количество сотрудников: {employees_count}
             </Typography>
           </>
         }

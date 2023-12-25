@@ -6,24 +6,25 @@ import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 
 import Image from '../Image/Image';
+import { StyledListItemAvatar } from './styled';
 import { EmployeeType } from '../../types/entities';
 import { apiUrl, separtor } from '../../constants/constants';
 import moment from 'moment';
-import { StyledLink } from './styled';
 import { Link } from 'react-router-dom';
 
 type EmployeeItemType = {
   employee: EmployeeType;
+  hasLink?: boolean
 };
 
-const EmployeeItem: FC<EmployeeItemType> = ({ employee }) => {
+const EmployeeItem: FC<EmployeeItemType> = ({ employee, hasLink = true }) => {
   let history = useNavigate();
 
   const { id, avatar, name, age, education, foreign_level, company } = employee;
 
   const onItemClick = () => {
-    history(`/employees/${id}`);
-  }
+    hasLink && history(`/employees/${id}`);
+  };
   
   return (
     <ListItem
@@ -38,7 +39,7 @@ const EmployeeItem: FC<EmployeeItemType> = ({ employee }) => {
         }  
         }}
     >
-      <ListItemAvatar sx={{
+      <StyledListItemAvatar sx={{
         '@media (max-width: 900px)': {
           alignSelf: 'center'
         } 
@@ -51,7 +52,7 @@ const EmployeeItem: FC<EmployeeItemType> = ({ employee }) => {
           }
           alt="Employee avatar"
         />
-      </ListItemAvatar>
+      </StyledListItemAvatar>
       <ListItemText
         sx={{ ml: 1 }}
         primary={`ФИО: ${name}`}
@@ -64,7 +65,7 @@ const EmployeeItem: FC<EmployeeItemType> = ({ employee }) => {
               color="text.primary"
               key={'company title'}
             >
-              Компания: <Link to={`/companies/${company.id}`}>{company.name}</Link>
+              Компания: <Link to={`/companies/${company.id}`}>{<Typography component="span" color="blue" >{company.name}</Typography>}</Link>
             </Typography>}
             <Typography
               sx={{ display: 'flex', flexDirection: 'column', mt: 1 }}

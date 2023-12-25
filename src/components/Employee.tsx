@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -12,6 +12,7 @@ import { apiUrl, separtor } from '../constants/constants';
 import moment from 'moment';
 import { Button } from '@mui/material';
 import EmployeeModal from '../containers/EmployeeModal';
+import { Link } from 'react-router-dom';
 
 const Employee: FC = () => {
   const { id } = useParams();
@@ -20,12 +21,18 @@ const Employee: FC = () => {
   const [updateEmployee, { data: updatedData, error: updatinError, isLoading: updatinIsLoading }] = employeesApiSlice.useUpdateEmployeeMutation();
   const { data: employee, error, isLoading } = employeesApiSlice.useGetEmployeeQuery(id);
 
+  useEffect(() => {
+    if (updatedData) {
+      setModalOpen(false);
+    }
+  }, [updatedData]);
+
   useShowErrorToast(error);
   useShowErrorToast(updatinError);
 
   const onOpenModal = () => {
     setModalOpen(true)
-  }
+  };
 
   return (
     <Container component="div" maxWidth="xs">
@@ -40,14 +47,16 @@ const Employee: FC = () => {
         <Typography component="h1" variant="h5">
           Информация о сотруднике
         </Typography>
-        <Image
-          src={
-            employee?.avatar
-              ? `${apiUrl}${employee.avatar}`
-              : `/static/images/no-image.png`
-          }
-          alt="Employee avatar"
-        />
+        <Box sx={{ alignSelf: 'center'}}>
+          <Image
+            src={
+              employee?.avatar
+                ? `${apiUrl}${employee.avatar}`
+                : `/static/images/no-image.png`
+            }
+            alt="Employee avatar"
+          />
+        </Box>
         <Box component="form" sx={{ mt: 1 }}>
           <Typography component="h3" variant="h5">
             ID: {id}
@@ -60,6 +69,9 @@ const Employee: FC = () => {
           </Typography>
           <Typography component="h3" variant="h5">
             Адрес проживания: {employee?.adress}
+          </Typography>
+          <Typography component="h3" variant="h5">
+            Компания: {employee?.company ? <Link to={`/companies/${employee?.company?.id}`}>{<Typography component="span" color="blue" >{employee?.company?.name}</Typography>}</Link> : 'Нет'}
           </Typography>
           <Typography component="h3" variant="h5">
             Образование:

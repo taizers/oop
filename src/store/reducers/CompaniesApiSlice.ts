@@ -2,6 +2,12 @@ import { apiSlice } from '../api/apiSlice';
 
 export const companiesApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
+    getAllCompanies: builder.query({
+      query: () => ({
+        url: '/companies/all',
+      }),
+      providesTags: ['Company'],
+    }),
     getCompany: builder.query({
       query: (id) => ({
         url: `/companies/${id}`,
@@ -10,7 +16,7 @@ export const companiesApiSlice = apiSlice.injectEndpoints({
     }),
     getCompanies: builder.query({
       query: ({ page, limit, query }) => ({
-        url: `/companies?page=${page}&limit=${limit}&query${query}`,
+        url: `/companies?page=${page}&limit=${limit}&query=${query}`,
       }),
       providesTags: ['Company'],
     }),

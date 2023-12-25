@@ -9,9 +9,17 @@ export const employeesApiSlice = apiSlice.injectEndpoints({
       providesTags: ['Employee'],
     }),
     getEmployees: builder.query({
-      query: ({ page, limit, query }) => ({
-        url: `/employees?page=${page}&limit=${limit}&query${query}`,
-      }),
+      query: ({ page, limit, query, company }) => {
+        if (company) {
+          return {
+            url: `/employees?page=${page}&limit=${limit}&company=${company}&query=${query}`,
+          }
+        }
+
+        return {
+          url: `/employees?page=${page}&limit=${limit}&query=${query}`,
+        }
+      },
       providesTags: ['Employee'],
     }),
     createEmployee: builder.mutation({
@@ -26,7 +34,8 @@ export const employeesApiSlice = apiSlice.injectEndpoints({
       query: ({ id, employee }) => ({
         url: `/employees/${id}`,
         method: 'PUT',
-        body: { ...employee },
+        body: employee,
+        formData: true,
       }),
       invalidatesTags: ['Employee'],
     }),

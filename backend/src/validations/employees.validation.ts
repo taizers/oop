@@ -51,6 +51,7 @@ export const getPaginatedEmployeesValidation = validate(
       page: Joi.number().required(),
       limit: Joi.number().required(),
       query: Joi.string().allow(''),
+      company: Joi.number(),
     }),
   },
   {

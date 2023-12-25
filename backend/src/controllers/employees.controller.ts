@@ -1,20 +1,26 @@
 import { NextFunction, Response, Request } from 'express';
 import { getPaginatedEmployees, createEmployee, deleteEmployee, getEmployee, updateEmployee } from '../services/db/employees.services';
 import logger from '../helpers/logger';
-import fs from 'fs';
+import { deleteFile } from '../utils/files';
 
 export const getPaginatedEmployeesAction = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const { page, limit, query } = req.query;
+  const { page, limit, query, company } = req.query;
 
-  logger.info(`Get Paginated Employees Action: { page: ${page}, limit: ${limit}, query: ${query} }`);
+  logger.info(`Get Paginated Employees Action: { page: ${page}, limit: ${limit}, query: ${query}, company: ${company} }`);
 
   try {
-    const employees = await getPaginatedEmployees(+page, +limit, query?.toString());
-    
+    const where = {} as any;
+
+    if (company) {
+      where.company_id = company;
+    }
+
+    const employees = await getPaginatedEmployees(+page, +limit, query?.toString(), where);
+
     res.status(200).json(employees);
   } catch (error) {
     logger.error('Get Paginated Employees Action - Cannot get employees', error);
@@ -76,9 +82,11 @@ export const updateEmployeeAction = async (
     let updatedEmployee;
 
     if (file) {
-      const company = await getEmployee({id});
+      const employee = await getEmployee({id});
 
-      fs.unlinkSync(`storage/employees/avatars/${company.avatar}`);
+      const filePath = `storage/employees/avatars/${employee.avatar}`;
+
+      deleteFile(filePath);
 
       updatedEmployee = await updateEmployee({ id }, {...payload, avatar: file});
     } else {
@@ -102,9 +110,11 @@ export const deleteEmployeeAction = async (
   logger.info(`Delete Employee Action: { id: ${id} }`);
 
   try {
-    const company = await getEmployee({id});
+    const employee = await getEmployee({id});
 
-    fs.unlinkSync(`storage/employees/avatars/${company.avatar}`);
+    const filePath = `storage/employees/avatars/${employee.avatar}`;
+
+    deleteFile(filePath);
 
     await deleteEmployee(id);
     

@@ -37,6 +37,5 @@ export default async (
     });
   }
 
-  console.log(error);
   return customResponse(res, error.status, validationMessage || error.message);
 };

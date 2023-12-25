@@ -9,6 +9,11 @@ import { EmployeeType } from '../types/entities';
 import { separtor } from '../constants/constants';
 import SelectField from '../components/SelectField';
 import DatePicker from '../components/DatePicker';
+import dayjs, { Dayjs } from 'dayjs';
+import UploadFile from '../components/UploadFile';
+import AutoCompleteComponent from '../components/AutoComplete';
+import { companiesApiSlice } from '../store/reducers/CompaniesApiSlice';
+import { useShowErrorToast } from '../hooks';
 
 type EmployeeModalType = {
   employee?: EmployeeType;
@@ -24,17 +29,53 @@ const EmployeeModal: FC<EmployeeModalType> = ({ employee, type, mutationFunction
   const [courses, setCourses] = useState<Array<string> | null>(employee?.courses?.split(separtor) || null);
   const [foreignLevel, setForeignLevel] = useState<Array<string> | null>(employee?.foreign_level?.split(separtor) || null);
   const [education, setEducation] = useState<Array<string> | null>(employee?.education?.split(separtor) || null);
-  const [age, setAge] = useState<Date | null>(employee?.age || null);
+  const [age, setAge] = useState<Date | null | Dayjs>(employee?.age || dayjs(Date.now()));
+  const [avatar, setAvatar] = useState<any>(null);
+  const [company, setCompany] = useState<any>(employee?.company ? {id: employee.company?.id, name: employee.company?.name} : null);
+
+  const {
+    data: companies,
+    error,
+    isLoading,
+  } = companiesApiSlice.useGetAllCompaniesQuery('');
+
+  useShowErrorToast(error);
 
   const handleClose = () => {
     setModalOpen(false);
   };
 
+  const sendEmployee = (newEmployee: object | FormData) => {
+
+    if (type === 'create') {
+      return mutationFunction(newEmployee);
+    };
+    
+    if (type === 'update') {
+      return mutationFunction({ id: employee?.id, employee: newEmployee });
+    };
+  }
+
   const onSubmitForm = () => {
     if (!name || !adress || !courses || !foreignLevel || !education || !age) {
-      console.log('Вы заполнили не все поля');
-    }
+      return console.log('Вы заполнили не все поля');
+    };
 
+    if (avatar) {
+      const formData = new FormData();
+
+      formData.append('name', name);
+      formData.append('avatar', avatar[0].file);
+      formData.append('adress', adress);
+      formData.append('courses', courses?.join(separtor));
+      formData.append('foreign_level', foreignLevel?.join(separtor));
+      formData.append('education', education?.join(separtor));
+      formData.append('age', age.toString());
+      formData.append('company_id', company.id);
+
+      return sendEmployee(formData);
+    };
+  
     const newEmployee = {
       name,
       adress,
@@ -42,17 +83,10 @@ const EmployeeModal: FC<EmployeeModalType> = ({ employee, type, mutationFunction
       foreign_level: foreignLevel?.join(separtor),
       education: education?.join(separtor),
       age,
-    }
+      company_id: company.id,
+    };
 
-    console.log({ id: employee?.id, employee: newEmployee });
-
-    if (type === 'create') {
-      return mutationFunction(newEmployee);
-    }
-    
-    if (type === 'update') {
-      return mutationFunction({ id: employee?.id, employee: newEmployee });
-    }
+    sendEmployee(newEmployee);
   };
 
   const getTitle = () => {
@@ -63,13 +97,14 @@ const EmployeeModal: FC<EmployeeModalType> = ({ employee, type, mutationFunction
     if (type === 'update') {
       return 'Обновить информацио о сотруднике';
     }
-  }
+  };
 
   return (
     <div>
       <Dialog open={isModalOpen} onClose={handleClose}>
         <DialogTitle>{getTitle()}</DialogTitle>
         <DialogContent>
+          <UploadFile files={avatar} setFiles={setAvatar}/>
           <TextField
             autoFocus
             margin="dense"
@@ -95,6 +130,7 @@ const EmployeeModal: FC<EmployeeModalType> = ({ employee, type, mutationFunction
           <SelectField values={courses} setValues={setCourses} label={'Курсы'}/>
           <SelectField values={education} setValues={setEducation} label={'Образование'}/>
           <SelectField values={foreignLevel} setValues={setForeignLevel} label={'Иностранные изыки'}/>
+          <AutoCompleteComponent options={companies} value={company} setValue={setCompany} label={'Компания'} />
           <DatePicker value={age} setValue={setAge} label={'Дата рождения'} />
         </DialogContent>
         <DialogActions>

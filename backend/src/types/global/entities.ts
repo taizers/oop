@@ -12,7 +12,7 @@ export type UserType = {
 export type CompanyType = {
     id: number;
     name: string;
-    age: string;
+    age: Date | string;
     location: string;
     scope: string;
     ceo: string;
@@ -25,7 +25,7 @@ export type CompanyType = {
 export type EmployeeType = {
     id: number;
     name: string;
-    age: string;
+    age: Date | string;
     education: string;
     courses: string;
     foreign_level: string;

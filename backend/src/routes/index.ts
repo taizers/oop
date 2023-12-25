@@ -24,12 +24,12 @@ const router = express.Router();
 
 router.use(
   '/storage/companies/avatars',
-  express.static('/storage/companies/avatars')
+  express.static('storage/companies/avatars')
 );
 
 router.use(
   '/storage/employees/avatars',
-  express.static('/storage/employees/avatars')
+  express.static('storage/employees/avatars')
 );
 
 // Authorization

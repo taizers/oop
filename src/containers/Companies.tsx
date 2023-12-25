@@ -15,12 +15,16 @@ import { defaultLimit, defaultStartPage } from '../constants/constants';
 import { useDebounce, useShowErrorToast } from '../hooks';
 import CompanyItem from '../components/CompanyItem/CompanyItem';
 import { companiesApiSlice } from '../store/reducers/CompaniesApiSlice';
+import CompanyModal from './CompanyModal';
 
 const Companies: FC = () => {
   const [query, setQuery] = useState<string>('');
   const [page, setPage] = useState<number>(defaultStartPage);
   const [limit, setLimit] = useState<number>(defaultLimit);
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const debouncedValue = useDebounce(query);
+
+  const [createCompany, { data: createdData, error: creatingError, isLoading: creatingIsLoading }] = companiesApiSlice.useCreateCompanyMutation();
 
   // const [queryType, setQueryType] = useState('');
   const {
@@ -34,6 +38,7 @@ const Companies: FC = () => {
   });
 
   useShowErrorToast(error);
+  useShowErrorToast(creatingError);
 
   const companiesCount = companies?.companies?.length;
 
@@ -45,7 +50,7 @@ const Companies: FC = () => {
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(query);
+    
     if (query) {
       setPage(defaultStartPage);
     }
@@ -59,6 +64,10 @@ const Companies: FC = () => {
       window.scrollTo(0, 0);
     }
     setPage(value - 1);
+  };
+
+  const onOpenModal = () => {
+    setModalOpen(true)
   };
 
   return (
@@ -81,12 +90,13 @@ const Companies: FC = () => {
           onChange={(e: any) => setQuery(e.currentTarget.value)}
         />
         <Button
-          type="submit"
+          type="button"
           fullWidth
           variant="contained"
+          onClick={onOpenModal}
           sx={{ ml: 3, mt: '16px', mb: '8px', width: '20%' }}
         >
-          Найти
+          Создать
         </Button>
       </Box>
       <Box
@@ -104,7 +114,7 @@ const Companies: FC = () => {
             }}
           >
             {companies.companies?.map((company: CompanyType, index: number) => (
-              <CompanyItem company={company} key={`companies ${index}`} />
+              <CompanyItem company={company} key={`company ${index}`} />
             ))}
           </List>
         )}
@@ -126,7 +136,7 @@ const Companies: FC = () => {
         )}
         {companiesCount && (
           <Pagination
-            count={companies.totalPages}
+            count={companies?.totalPages}
             color="primary"
             defaultPage={1}
             boundaryCount={2}
@@ -135,6 +145,7 @@ const Companies: FC = () => {
           />
         )}
       </Box>
+      {isModalOpen && <CompanyModal isModalOpen={isModalOpen} setModalOpen={setModalOpen} type='create' mutationFunction={createCompany} />}
     </Box>
   );
 };

@@ -1,30 +1,24 @@
 import React, { FC, useState, useEffect } from 'react';
 import List from '@mui/material/List';
 import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Pagination from '@mui/material/Pagination';
-// import InputLabel from '@mui/material/InputLabel';
-// import MenuItem from '@mui/material/MenuItem';
-// import FormControl from '@mui/material/FormControl';
-// import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 import { EmployeeType } from '../types/entities';
 import { defaultLimit, defaultStartPage } from '../constants/constants';
 import { employeesApiSlice } from '../store/reducers/EmployeesApiSlice';
 import { useDebounce, useShowErrorToast } from '../hooks';
 import EmployeeItem from '../components/EmployeeItem/EmployeeItem';
-import EmployeeModal from './EmployeeModal';
+import { useParams } from 'react-router';
 
-const Employees: FC = () => {
+const EmployeesContainer: FC = () => {
+  const { id } = useParams();
   const [query, setQuery] = useState<string>('');
   const [page, setPage] = useState<number>(defaultStartPage);
   const [limit, setLimit] = useState<number>(defaultLimit);
-  const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const debouncedValue = useDebounce(query);
 
-  const [createEmployee, { data: createdData, error: creatingError, isLoading: creatingIsLoading }] = employeesApiSlice.useCreateEmployeeMutation();
   const {
     data: employees,
     error,
@@ -33,10 +27,10 @@ const Employees: FC = () => {
     page,
     limit,
     query: debouncedValue,
+    company: id,
   });
 
   useShowErrorToast(error);
-  useShowErrorToast(creatingError);
 
   const employeesCount = employees?.employees?.length;
 
@@ -46,15 +40,9 @@ const Employees: FC = () => {
     }
   }, [query]);
 
-  useEffect(() => {
-    if (createdData) {
-      setModalOpen(false);
-    }
-  }, [createdData]);
-
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
+
     if (query) {
       setPage(defaultStartPage);
     }
@@ -70,9 +58,6 @@ const Employees: FC = () => {
     setPage(value - 1);
   };
 
-  const onOpenModal = () => {
-    setModalOpen(true)
-  };
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -92,15 +77,6 @@ const Employees: FC = () => {
           autoFocus
           onChange={(e: any) => setQuery(e.currentTarget.value)}
         />
-        <Button
-          type="button"
-          fullWidth
-          variant="contained"
-          onClick={onOpenModal}
-          sx={{ ml: 3, mt: '16px', mb: '8px', width: '20%' }}
-        >
-          Создать
-        </Button>
       </Box>
       <Box
         sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
@@ -117,7 +93,7 @@ const Employees: FC = () => {
             }}
           >
             {employees.employees?.map((employee: EmployeeType, index: number) => (
-              <EmployeeItem employee={employee} key={`employee ${index}`} />
+              <EmployeeItem hasLink={false} employee={employee} key={`employee ${index}`} />
             ))}
           </List>
         )}
@@ -148,9 +124,8 @@ const Employees: FC = () => {
           />
         )}
       </Box>
-      {isModalOpen && <EmployeeModal isModalOpen={isModalOpen} setModalOpen={setModalOpen} type='create' mutationFunction={createEmployee} />}
     </Box>
   );
 };
 
-export default Employees;
+export default EmployeesContainer;

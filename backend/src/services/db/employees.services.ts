@@ -1,10 +1,11 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Company, Employee } = require('../../db/models/index');
 import { Op } from "sequelize";
+import { EmployeeType } from "../../types/global/entities";
+import EmployeeDto from "../../dtos/employee.dto";
+import { UnCreatedError } from "../../helpers/error";
 
-export const  getPaginatedEmployees = async (page: number, limit: number, query: string) => {
-  const where = {} as {name: object};
-
+export const  getPaginatedEmployees = async (page: number, limit: number, query: string, where: any = {}) => {
   if (query) {
     where.name = {
       [Op.like]: `%${query}%`,
@@ -30,23 +31,27 @@ export const  getPaginatedEmployees = async (page: number, limit: number, query:
 
   const totalPages = !count ? 1 : Math.ceil(count / limit);
 
+  const employeesDto = rows?.map((employee: EmployeeType) => ({...new EmployeeDto(employee)}));
+
   return {
     totalPages,
     page: page + 1,
-    employees: rows,
+    employees: employeesDto,
   };
 }
 
 export const createEmployee = async (payload: object) => {
   try {
-    return await Employee.create(payload);  
+    const employee = await Employee.create(payload); 
+
+    return {...new EmployeeDto(employee)};
   } catch (error) {
-    throw new error('Сотрудник не создан');
+    throw new UnCreatedError('Сотрудник');
   }
 };
 
 export const  getEmployee = async (where: object) => {
-  return await Employee.findOne({ 
+  const employee = await Employee.findOne({ 
     where,
     include: [
       {
@@ -55,6 +60,8 @@ export const  getEmployee = async (where: object) => {
       },
     ],
   });
+
+  return {...new EmployeeDto(employee)};
 }
 
 export const  updateEmployee = async (where: object, payload: object) => {

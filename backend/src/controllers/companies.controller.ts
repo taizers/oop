@@ -1,7 +1,24 @@
 import { NextFunction, Response, Request } from 'express';
-import { createCompany, deleteCompany, getCompany, getPaginatedCompanies, updateCompany } from '../services/db/companies.services';
+import { createCompany, deleteCompany, getAllCompanies, getCompany, getPaginatedCompanies, updateCompany } from '../services/db/companies.services';
 import logger from '../helpers/logger';
-import fs from 'fs';
+import { deleteFile } from '../utils/files';
+
+export const getAllCompaniesAction = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  logger.info(`Get All Companies Action`);
+
+  try {
+    const companies = await getAllCompanies();
+    
+    res.status(200).json(companies);
+  } catch (error) {
+    logger.error('Get All Companies Action - Cannot get Companies', error);
+    next(error);
+  }
+};
 
 export const getPaginatedCompaniesAction = async (
   req: Request,
@@ -13,9 +30,9 @@ export const getPaginatedCompaniesAction = async (
   logger.info(`Get Paginated Companies Action: { page: ${page}, limit: ${limit}, query: ${query} }`);
 
   try {
-    const Companies = await getPaginatedCompanies(+page, +limit, query?.toString());
+    const companies = await getPaginatedCompanies(+page, +limit, query?.toString());
     
-    res.status(200).json(Companies);
+    res.status(200).json(companies);
   } catch (error) {
     logger.error('Get Paginated Companies Action - Cannot get Companies', error);
     next(error);
@@ -78,7 +95,9 @@ export const updateCompanyAction = async (
     if (file) {
       const company = await getCompany({id});
 
-      fs.unlinkSync(`storage/companies/avatars/${company.avatar}`);
+      const filePath = `storage/companies/avatars/${company.avatar}`;
+
+      deleteFile(filePath);
 
       updatedCompany = await updateCompany({ id }, {...payload, avatar: file});
     } else {
@@ -104,7 +123,9 @@ export const deleteCompanyAction = async (
   try {    
     const company = await getCompany({id});
 
-    fs.unlinkSync(`storage/companies/avatars/${company.avatar}`);
+    const filePath = `storage/companies/avatars/${company.avatar}`;
+
+    deleteFile(filePath);
 
     await deleteCompany(id);
     
