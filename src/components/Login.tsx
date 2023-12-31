@@ -29,9 +29,6 @@ const Copyright = (props: any) => {
       {...props}
     >
       {'Copyright © '}
-      <Link color="inherit" href="#">
-        Website
-      </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
@@ -58,12 +55,6 @@ const Login: FC = () => {
       setToken(token);
     }
   }, [data]);
-
-  // useEffect(() => {
-  //   if (error && 'status' in error) {
-  //     createToast.error(error.data, error.status);
-  //   }
-  // }, [error]);
 
   const onSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -120,10 +111,6 @@ const Login: FC = () => {
               onChange={(evt) => setPassword(evt.target.value)}
               autoComplete="current-password"
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Запомнить меня"
-            />
             <Button
               type="submit"
               fullWidth
@@ -133,11 +120,6 @@ const Login: FC = () => {
               Войти
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="/forgotPassword" variant="body2">
-                  Забыли пароль?
-                </Link>
-              </Grid>
               <Grid item>
                 <Link href="/signup" variant="body2">
                   {'Нет аккаунта? Зарегистрироваться'}

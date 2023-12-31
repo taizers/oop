@@ -1,15 +1,34 @@
-import React, { FC } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import UpdateUserModal from '../containers/UpdateUserModal';
-import { useAppSelector } from '../hooks';
+import UpdateUserModal from '../containers/UserModal';
+import { useAppSelector, useShowErrorToast } from '../hooks';
+import { usersApiSlice } from '../store/reducers/UsersApiSlice';
+import { Button } from '@mui/material';
+import moment from 'moment';
 
 const Profile: FC = () => {
   const { user } = useAppSelector((state) => state.auth);
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
+
+  const [updateUser, { data, error, isLoading }] =
+  usersApiSlice.useUpdateUserMutation();
+
+  useShowErrorToast(error);
+
+  const onOpenModal = () => {
+    setModalOpen(true)
+  };
+
+  useEffect(() => {
+    if (data) {
+      setModalOpen(false);
+    }
+  }, [data]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -39,10 +58,18 @@ const Profile: FC = () => {
             Имя: {user?.name}
           </Typography>
           <Typography component="h3" variant="h5">
-            Удалён: {user?.deleted_at ? 'Да' : 'Нет'}
+            Дата создания: {moment(user?.created_at).format("DD.MM.YYYY HH:mm:ss")}
           </Typography>
-          {user && <UpdateUserModal user={user} />}
+          <Button
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+            onClick={onOpenModal}
+          >
+            Редактировать профиль
+          </Button>
         </Box>
+        {isModalOpen && user && <UpdateUserModal user={user} isModalOpen={isModalOpen} setModalOpen={setModalOpen} type='update' mutationFunction={updateUser} />}
       </Box>
     </Container>
   );

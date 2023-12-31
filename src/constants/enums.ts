@@ -1,7 +1,7 @@
 export enum Sidebar {
-  Main = 'Главная',
   Employees = 'Сотрудники',
   Companies = 'Компании',
+  Menegers = 'Менеджеры',
   Login = 'Войти',
   Profile = 'Профиль',
   Logout = 'Выйти',

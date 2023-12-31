@@ -15,52 +15,50 @@ import { authApiSlice } from './store/reducers/AuthApiSlice';
 import PublicRoute from './components/PublicRoute';
 import Profile from './components/Profile';
 import { setUserData, setUserToken } from './store/reducers/AuthSlice';
-import { useAppDispatch } from './hooks';
+import { useAppDispatch, useShowErrorToast } from './hooks';
 import NotFound from './components/NotFound';
+import Users from './containers/Users';
 
 const App: FC = () => {
-  // const dispatch = useAppDispatch();
-  // const { data, error, isLoading } = authApiSlice.useProfileQuery('');
+  const dispatch = useAppDispatch();
+  const { data, error, isLoading } = authApiSlice.useProfileQuery('');
 
-  // useEffect(() => {
-  //   if (data?.id) {
-  //     dispatch(setUserData(data));
-  //   }
-  // }, [data]);
+  useShowErrorToast(error);
 
-  // useEffect(() => {
-  //   const localToken = getToken();
+  useEffect(() => {
+    if (data?.id) {
+      dispatch(setUserData(data));
+    }
+  }, [data]);
 
-  //   if (localToken) {
-  //     dispatch(setUserToken(localToken));
-  //   }
-  // }, []);
+  useEffect(() => {
+    const localToken = getToken();
+
+    if (localToken) {
+      dispatch(setUserToken(localToken));
+    }
+  }, []);
 
   return (
     <Routes>
       <Route path={'/'} element={<LayOut />}>
         {/* public routes */}
-        <Route
-          index
-          element={
-            <>
-              
-            </>
-          }
-        />
+
         <Route element={<PublicRoute />}>
-          {/* <Route path={'login'} element={<Login />} />
-          <Route path={'signup'} element={<SignUp />} /> */}
-          <Route path={'companies'} element={<Companies />} />
-          <Route path={'companies/:id'} element={<Company />} />
-          <Route path={'employees'} element={<Employees />} />
-          <Route path={'employees/:id'} element={<Employee />} />
+          <Route path={'login'} element={<Login />} />
+          <Route path={'signup'} element={<SignUp />} />
         </Route>
 
         {/* protected routes */}
-        {/* <Route element={<RequireAuth />}>
+        <Route element={<RequireAuth />}>
           <Route path={'profile'} element={<Profile />} />
-        </Route> */}
+          <Route path={'users'} element={<Users />} />
+        </Route>
+
+        <Route path={'companies'} element={<Companies />} />
+        <Route path={'companies/:id'} element={<Company />} />
+        <Route index path={'employees'} element={<Employees />} />
+        <Route path={'employees/:id'} element={<Employee />} />
 
         {/* Not Found route */}
         <Route path="*" element={<NotFound />} />

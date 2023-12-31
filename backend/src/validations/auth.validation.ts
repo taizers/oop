@@ -4,7 +4,7 @@ export const signUpValidation = validate(
   {
     body: Joi.object({
       email: Joi.string().email().max(256).required(),
-      password: Joi.string().max(256).required(),
+      password: Joi.string().min(8).max(256).required(),
       name: Joi.string().max(256).allow(null),
     }),
   },

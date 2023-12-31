@@ -11,13 +11,16 @@ import { EmployeeType } from '../../types/entities';
 import { apiUrl, separtor } from '../../constants/constants';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import { Button } from '@mui/material';
 
 type EmployeeItemType = {
   employee: EmployeeType;
-  hasLink?: boolean
+  hasLink?: boolean;
+  deleteFunction: (id: number) => void;
+  userId: string | undefined | number;
 };
 
-const EmployeeItem: FC<EmployeeItemType> = ({ employee, hasLink = true }) => {
+const EmployeeItem: FC<EmployeeItemType> = ({ employee, hasLink = true, deleteFunction, userId }) => {
   let history = useNavigate();
 
   const { id, avatar, name, age, education, foreign_level, company } = employee;
@@ -54,7 +57,12 @@ const EmployeeItem: FC<EmployeeItemType> = ({ employee, hasLink = true }) => {
         />
       </StyledListItemAvatar>
       <ListItemText
-        sx={{ ml: 1 }}
+        sx={{
+          ml: 1,
+          '@media (max-width: 900px)': {
+            alignSelf: 'center'
+          } 
+        }}
         primary={`ФИО: ${name}`}
         secondary={
           <>
@@ -116,6 +124,15 @@ const EmployeeItem: FC<EmployeeItemType> = ({ employee, hasLink = true }) => {
                 {item}
               </Typography>
             ))}
+            {userId && <Button
+              type="button"
+              fullWidth
+              variant="contained"
+              onClick={() => deleteFunction(id)}
+              sx={{ width: '100%', mt: 2 }}
+            >
+              Удалить
+            </Button>}
           </>
         }
       />

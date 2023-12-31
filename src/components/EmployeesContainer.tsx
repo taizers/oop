@@ -8,7 +8,7 @@ import Pagination from '@mui/material/Pagination';
 import { EmployeeType } from '../types/entities';
 import { defaultLimit, defaultStartPage } from '../constants/constants';
 import { employeesApiSlice } from '../store/reducers/EmployeesApiSlice';
-import { useDebounce, useShowErrorToast } from '../hooks';
+import { useAppSelector, useDebounce, useShowErrorToast } from '../hooks';
 import EmployeeItem from '../components/EmployeeItem/EmployeeItem';
 import { useParams } from 'react-router';
 
@@ -19,10 +19,11 @@ const EmployeesContainer: FC = () => {
   const [limit, setLimit] = useState<number>(defaultLimit);
   const debouncedValue = useDebounce(query);
 
+  const { user } = useAppSelector((state) => state.auth);
+
   const {
     data: employees,
-    error,
-    isLoading,
+    error
   } = employeesApiSlice.useGetEmployeesQuery({
     page,
     limit,
@@ -30,7 +31,10 @@ const EmployeesContainer: FC = () => {
     company: id,
   });
 
+  const [deleteEmployee, { error: deletingError }] = employeesApiSlice.useDeleteEmployeeMutation();
+
   useShowErrorToast(error);
+  useShowErrorToast(deletingError);
 
   const employeesCount = employees?.employees?.length;
 
@@ -93,7 +97,7 @@ const EmployeesContainer: FC = () => {
             }}
           >
             {employees.employees?.map((employee: EmployeeType, index: number) => (
-              <EmployeeItem hasLink={false} employee={employee} key={`employee ${index}`} />
+              <EmployeeItem hasLink={false} employee={employee} key={`employee ${index}`} deleteFunction={deleteEmployee} userId={user?.id} />
             ))}
           </List>
         )}

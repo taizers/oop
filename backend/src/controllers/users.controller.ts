@@ -79,11 +79,7 @@ export const updateUserAction = async (
       updateData.name = name;
     }
 
-    const resultUser = await updateUser(id, {
-      name,
-      newPassword,
-      oldPassword,
-    });
+    const resultUser = await updateUser(id, updateData);
     
     const userDto = new UserDto(resultUser);
     
@@ -106,7 +102,7 @@ export const deleteUserAction = async (
 
   try {
     if (userId === id) {
-      throw new UnProcessableEntityError('Нельзя удалть себя');
+      throw new UnProcessableEntityError('Нельзя удалить себя');
     }
     await deleteUser(id);
     

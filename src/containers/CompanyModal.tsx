@@ -9,6 +9,7 @@ import { CompanyType } from '../types/entities';
 import DatePicker from '../components/DatePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import UploadFile from '../components/UploadFile';
+import { createToast } from '../utils/toasts';
 
 type CompanyModalType = {
   company?: CompanyType;
@@ -42,7 +43,7 @@ const CompanyModal: FC<CompanyModalType> = ({ company, type, mutationFunction, s
 
   const onSubmitForm = () => {
     if (!name || !location || !scope || !ceo || !age) {
-      return console.log('Вы заполнили не все поля');
+      return createToast.error('Заполните все поля');
     }
 
     if (avatar) {

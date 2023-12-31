@@ -10,13 +10,16 @@ import { StyledListItemAvatar } from './styled';
 import Image from '../Image/Image';
 import { CompanyType } from '../../types/entities';
 import { apiUrl } from '../../constants/constants';
+import { Button } from '@mui/material';
 
 type CompanyItemType = {
   company: CompanyType;
   hasLink?: boolean;
+  deleteFunction: (id: number) => void;
+  userId: string | undefined | number;
 };
 
-const CompanyItem: FC<CompanyItemType> = ({company, hasLink = true}) => {
+const CompanyItem: FC<CompanyItemType> = ({company, hasLink = true, deleteFunction, userId}) => {
   let history = useNavigate();
   const { id, avatar, name, age, location, employees_count } = company;
 
@@ -26,16 +29,16 @@ const CompanyItem: FC<CompanyItemType> = ({company, hasLink = true}) => {
   
   return (
     <ListItem
-    alignItems="flex-start"
-    onClick={onItemClick}
-    sx={{ 
-      maxWidth: 500, 
-      bgcolor: '#f0f0fc',
-       mb: 1,
-      '@media (max-width: 900px)': {
-        flexDirection: 'column'
-      }  
-      }}
+      alignItems="flex-start"
+      onClick={onItemClick}
+      sx={{ 
+        maxWidth: 500, 
+        bgcolor: '#f0f0fc',
+        mb: 1,
+        '@media (max-width: 900px)': {
+          flexDirection: 'column'
+        }  
+        }}
     >
       <StyledListItemAvatar sx={{
         '@media (max-width: 900px)': {
@@ -52,7 +55,12 @@ const CompanyItem: FC<CompanyItemType> = ({company, hasLink = true}) => {
         />
       </StyledListItemAvatar>
       <ListItemText
-        sx={{ ml: 1 }}
+        sx={{
+          ml: 1,
+          '@media (max-width: 900px)': {
+            alignSelf: 'center'
+          } 
+        }}
         primary={`Название: ${name}`}
         secondary={
           <>
@@ -83,6 +91,15 @@ const CompanyItem: FC<CompanyItemType> = ({company, hasLink = true}) => {
             >
               Количество сотрудников: {employees_count}
             </Typography>
+            {userId && <Button
+              type="button"
+              fullWidth
+              variant="contained"
+              onClick={() => deleteFunction(id)}
+              sx={{ width: '100%', mt: 2 }}
+            >
+              Удалить
+            </Button>}
           </>
         }
       />

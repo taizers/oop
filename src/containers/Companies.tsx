@@ -12,7 +12,7 @@ import Pagination from '@mui/material/Pagination';
 
 import { CompanyType } from '../types/entities';
 import { defaultLimit, defaultStartPage } from '../constants/constants';
-import { useDebounce, useShowErrorToast } from '../hooks';
+import { useAppSelector, useDebounce, useShowErrorToast } from '../hooks';
 import CompanyItem from '../components/CompanyItem/CompanyItem';
 import { companiesApiSlice } from '../store/reducers/CompaniesApiSlice';
 import CompanyModal from './CompanyModal';
@@ -24,13 +24,15 @@ const Companies: FC = () => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const debouncedValue = useDebounce(query);
 
-  const [createCompany, { data: createdData, error: creatingError, isLoading: creatingIsLoading }] = companiesApiSlice.useCreateCompanyMutation();
+  const { user } = useAppSelector((state) => state.auth);
+
+  const [createCompany, { data: createdData, error: creatingError }] = companiesApiSlice.useCreateCompanyMutation();
+  const [deleteCompany, { error: deletingError }] = companiesApiSlice.useDeleteCompanyMutation();
 
   // const [queryType, setQueryType] = useState('');
   const {
     data: companies,
-    error,
-    isLoading,
+    error
   } = companiesApiSlice.useGetCompaniesQuery({
     page,
     limit,
@@ -39,6 +41,7 @@ const Companies: FC = () => {
 
   useShowErrorToast(error);
   useShowErrorToast(creatingError);
+  useShowErrorToast(deletingError);
 
   const companiesCount = companies?.companies?.length;
 
@@ -55,6 +58,12 @@ const Companies: FC = () => {
       setPage(defaultStartPage);
     }
   };
+
+  useEffect(() => {
+    if (createdData) {
+      setModalOpen(false);
+    }
+  }, [createdData]);
 
   const onPaginationChange = (
     event: React.ChangeEvent<unknown>,
@@ -80,16 +89,15 @@ const Companies: FC = () => {
       >
         <TextField
           margin="normal"
-          required
           fullWidth
           id="query"
-          label="Название"
+          label="Поиск"
           name="query"
           autoComplete="text"
           autoFocus
           onChange={(e: any) => setQuery(e.currentTarget.value)}
         />
-        <Button
+        {user?.id && <Button
           type="button"
           fullWidth
           variant="contained"
@@ -97,7 +105,7 @@ const Companies: FC = () => {
           sx={{ ml: 3, mt: '16px', mb: '8px', width: '20%' }}
         >
           Создать
-        </Button>
+        </Button>}
       </Box>
       <Box
         sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
@@ -114,7 +122,7 @@ const Companies: FC = () => {
             }}
           >
             {companies.companies?.map((company: CompanyType, index: number) => (
-              <CompanyItem company={company} key={`company ${index}`} />
+              <CompanyItem company={company} key={`company ${index}`} deleteFunction={deleteCompany} userId={user?.id} />
             ))}
           </List>
         )}

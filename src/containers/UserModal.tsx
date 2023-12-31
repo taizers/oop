@@ -1,69 +1,43 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { UserType, UpdateUserType } from '../constants/tsSchemes';
-import { usersApiSlice } from '../store/reducers/UsersApiSlice';
-import { useShowErrorToast } from '../hooks';
+import { UserType } from '../constants/tsSchemes';
+import { createToast } from '../utils/toasts';
 
-type UpdateUserModalType = {
-  user: UserType;
+type UserModalType = {
+  user?: UserType;
+  type: 'update' | 'create';
+  mutationFunction: (data:unknown) => void;
+  setModalOpen: (data:boolean) => void;
+  isModalOpen: boolean;
 };
 
-const UpdateUserModal: FC<UpdateUserModalType> = ({ user }) => {
-  const [open, setOpen] = useState<boolean>(false);
+const UserModal: FC<UserModalType> = ({ user, isModalOpen, setModalOpen, mutationFunction, type='create' }) => {
   const [name, setName] = useState<string>('');
   const [oldPassword, setOldPassword] = useState<string>('');
   const [newPassword, setNewPassword] = useState<string>('');
 
-  const [updateUser, { data, error, isLoading }] =
-    usersApiSlice.useUpdateUserMutation();
-
-  useShowErrorToast(error);
-
-  useEffect(() => {
-    if (!!data) {
-      setOpen(false);
-    }
-  }, [data]);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
   const handleClose = () => {
-    setOpen(false);
-    setName('');
-    setOldPassword('');
-    setNewPassword('');
+    setModalOpen(false);
   };
 
   const onSubmitForm = () => {
-    if ((!name || name === user.name) && (!oldPassword || !newPassword)) {
-      return console.log('Empty');
+    if ((!name || name === user?.name) && (!oldPassword || !newPassword)) {
+      return createToast.error('Заполните все поля');
     }
 
-    updateUser({ id: user.id, user: { name, oldPassword, newPassword } });
+    mutationFunction({ id: user?.id, user: { name, oldPassword, newPassword } });
   };
 
   return (
     <div>
-      <Button
-        fullWidth
-        variant="contained"
-        sx={{ mt: 3, mb: 2 }}
-        onClick={handleClickOpen}
-      >
-        Редактировать профиль
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Subscribe</DialogTitle>
+      <Dialog open={isModalOpen} onClose={handleClose}>
+        <DialogTitle>{'Редактирование профиля'}</DialogTitle>
         <DialogContent>
-          <DialogContentText>Редактирование профиля</DialogContentText>
           <TextField
             autoFocus
             margin="dense"
@@ -72,7 +46,7 @@ const UpdateUserModal: FC<UpdateUserModalType> = ({ user }) => {
             type="text"
             fullWidth
             variant="standard"
-            defaultValue={user.name || ''}
+            defaultValue={user?.name || ''}
             onChange={(evt) => setName(evt.target.value)}
           />
           <TextField
@@ -105,4 +79,4 @@ const UpdateUserModal: FC<UpdateUserModalType> = ({ user }) => {
   );
 };
 
-export default UpdateUserModal;
+export default UserModal;

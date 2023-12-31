@@ -14,6 +14,7 @@ import UploadFile from '../components/UploadFile';
 import AutoCompleteComponent from '../components/AutoComplete';
 import { companiesApiSlice } from '../store/reducers/CompaniesApiSlice';
 import { useShowErrorToast } from '../hooks';
+import { createToast } from '../utils/toasts';
 
 type EmployeeModalType = {
   employee?: EmployeeType;
@@ -58,7 +59,7 @@ const EmployeeModal: FC<EmployeeModalType> = ({ employee, type, mutationFunction
 
   const onSubmitForm = () => {
     if (!name || !adress || !courses || !foreignLevel || !education || !age) {
-      return console.log('Вы заполнили не все поля');
+      return createToast.error('Заполните все поля');
     };
 
     if (avatar) {

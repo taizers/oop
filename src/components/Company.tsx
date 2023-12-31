@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import { companiesApiSlice } from '../store/reducers/CompaniesApiSlice';
 import { apiUrl } from '../constants/constants';
 import Image from './Image/Image';
-import { useShowErrorToast } from '../hooks';
+import { useAppSelector, useShowErrorToast } from '../hooks';
 import { Button } from '@mui/material';
 import CompanyModal from '../containers/CompanyModal';
 import moment from 'moment';
@@ -17,6 +17,8 @@ const Company: FC = () => {
   const { id } = useParams();
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [isEmloyeesContainerOpen, setEmloyeesContainerOpen] = useState<boolean>(false);
+
+  const { user } = useAppSelector((state) => state.auth);
 
   const { data: company, error, isLoading } = companiesApiSlice.useGetCompanyQuery(id);
   const [updateCompany, { data: updatedData, error: updatinError, isLoading: updatinIsLoading }] = companiesApiSlice.useUpdateCompanyMutation();
@@ -78,7 +80,7 @@ const Company: FC = () => {
             Количество сотрудников: {company?.employees_count}
           </Typography>
         </Box>
-        <Button
+        {user?.id && <Button
           type="button"
           fullWidth
           variant="contained"
@@ -86,7 +88,7 @@ const Company: FC = () => {
           sx={{ ml: 3, mt: '16px', mb: '8px', width: '35%', alignSelf: 'center' }}
         >
           Обновить
-        </Button>
+        </Button>}
         <Button
           type="button"
           fullWidth

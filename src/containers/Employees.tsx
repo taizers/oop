@@ -13,7 +13,7 @@ import Pagination from '@mui/material/Pagination';
 import { EmployeeType } from '../types/entities';
 import { defaultLimit, defaultStartPage } from '../constants/constants';
 import { employeesApiSlice } from '../store/reducers/EmployeesApiSlice';
-import { useDebounce, useShowErrorToast } from '../hooks';
+import { useAppSelector, useDebounce, useShowErrorToast } from '../hooks';
 import EmployeeItem from '../components/EmployeeItem/EmployeeItem';
 import EmployeeModal from './EmployeeModal';
 
@@ -24,19 +24,23 @@ const Employees: FC = () => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const debouncedValue = useDebounce(query);
 
-  const [createEmployee, { data: createdData, error: creatingError, isLoading: creatingIsLoading }] = employeesApiSlice.useCreateEmployeeMutation();
+  const { user } = useAppSelector((state) => state.auth);
+
+  const [createEmployee, { data: createdData, error: creatingError }] = employeesApiSlice.useCreateEmployeeMutation();
+  const [deleteEmployee, { error: deletingError }] = employeesApiSlice.useDeleteEmployeeMutation();
   const {
     data: employees,
-    error,
-    isLoading,
+    error
   } = employeesApiSlice.useGetEmployeesQuery({
     page,
     limit,
     query: debouncedValue,
   });
 
+
   useShowErrorToast(error);
   useShowErrorToast(creatingError);
+  useShowErrorToast(deletingError);
 
   const employeesCount = employees?.employees?.length;
 
@@ -92,7 +96,7 @@ const Employees: FC = () => {
           autoFocus
           onChange={(e: any) => setQuery(e.currentTarget.value)}
         />
-        <Button
+        {user?.id && <Button
           type="button"
           fullWidth
           variant="contained"
@@ -100,7 +104,7 @@ const Employees: FC = () => {
           sx={{ ml: 3, mt: '16px', mb: '8px', width: '20%' }}
         >
           Создать
-        </Button>
+        </Button>}
       </Box>
       <Box
         sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
@@ -117,7 +121,7 @@ const Employees: FC = () => {
             }}
           >
             {employees.employees?.map((employee: EmployeeType, index: number) => (
-              <EmployeeItem employee={employee} key={`employee ${index}`} />
+              <EmployeeItem employee={employee} key={`employee ${index}`} deleteFunction={deleteEmployee} userId={user?.id} />
             ))}
           </List>
         )}

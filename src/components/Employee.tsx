@@ -6,7 +6,7 @@ import Container from '@mui/material/Container';
 import { useParams } from 'react-router-dom';
 
 import { employeesApiSlice } from '../store/reducers/EmployeesApiSlice';
-import { useShowErrorToast } from '../hooks';
+import { useAppSelector, useShowErrorToast } from '../hooks';
 import Image from './Image/Image';
 import { apiUrl, separtor } from '../constants/constants';
 import moment from 'moment';
@@ -17,6 +17,8 @@ import { Link } from 'react-router-dom';
 const Employee: FC = () => {
   const { id } = useParams();
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
+
+  const { user } = useAppSelector((state) => state.auth);
 
   const [updateEmployee, { data: updatedData, error: updatinError, isLoading: updatinIsLoading }] = employeesApiSlice.useUpdateEmployeeMutation();
   const { data: employee, error, isLoading } = employeesApiSlice.useGetEmployeeQuery(id);
@@ -104,7 +106,7 @@ const Employee: FC = () => {
             ))
           }
         </Box>
-        <Button
+        {user?.id && <Button
           type="button"
           fullWidth
           variant="contained"
@@ -112,7 +114,7 @@ const Employee: FC = () => {
           sx={{ ml: 3, mt: '16px', mb: '8px', width: '35%', alignSelf: 'center' }}
         >
           Обновить
-        </Button>
+        </Button>}
       </Box>
 
       {isModalOpen && employee && <EmployeeModal isModalOpen={isModalOpen} employee={employee} setModalOpen={setModalOpen} type='update' mutationFunction={updateEmployee} />}
