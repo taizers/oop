@@ -1,5 +1,5 @@
 import React, { useEffect, FC } from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 // import { Toaster } from 'react-hot-toast';
 
 import Login from './components/Login';
@@ -43,7 +43,9 @@ const App: FC = () => {
     <Routes>
       <Route path={'/'} element={<LayOut />}>
         {/* public routes */}
-
+        <Route
+          index
+          element={<Navigate to="/employees" />}/>
         <Route element={<PublicRoute />}>
           <Route path={'login'} element={<Login />} />
           <Route path={'signup'} element={<SignUp />} />
@@ -57,7 +59,7 @@ const App: FC = () => {
 
         <Route path={'companies'} element={<Companies />} />
         <Route path={'companies/:id'} element={<Company />} />
-        <Route index path={'employees'} element={<Employees />} />
+        <Route path={'employees'} element={<Employees />} />
         <Route path={'employees/:id'} element={<Employee />} />
 
         {/* Not Found route */}
