@@ -13,7 +13,6 @@ interface DatePickerComponentType {
     label: string;
 }
 
-
 const DatePickerComponent: FC<DatePickerComponentType> = ({value, setValue, label}) => {
   return (
     <Box>

@@ -25,7 +25,12 @@ const CompanyItem: FC<CompanyItemType> = ({company, hasLink = true, deleteFuncti
 
   const onItemClick = () => {
     hasLink && history(`/companies/${id}`);
-  }
+  };
+
+  const onDelete = (evt: any, id: number) => {
+    evt.stopPropagation();
+    deleteFunction(id)
+  };
   
   return (
     <ListItem
@@ -95,7 +100,7 @@ const CompanyItem: FC<CompanyItemType> = ({company, hasLink = true, deleteFuncti
               type="button"
               fullWidth
               variant="contained"
-              onClick={() => deleteFunction(id)}
+              onClick={(evt) => onDelete(evt, id)}
               sx={{ width: '100%', mt: 2 }}
             >
               Удалить

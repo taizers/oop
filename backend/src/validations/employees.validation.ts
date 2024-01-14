@@ -29,7 +29,7 @@ export const updateEmployeeValidation = validate(
       education: Joi.string().max(512),
       adress: Joi.string().max(255),
       foreign_level: Joi.string().max(10),
-      company_id: Joi.number(),
+      company_id: Joi.number().allow(null),
       age: Joi.date(),
       avatar: Joi.string().max(255),
     }),

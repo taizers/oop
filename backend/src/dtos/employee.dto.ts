@@ -25,7 +25,7 @@ export default class EmployeeDto {
     this.foreign_level = model.foreign_level;
     this.adress = model.adress;
     this.company_id = model.company_id;
-    this.avatar = `storage/employees/avatars/${model.avatar}`;
+    this.avatar = model.avatar && `storage/employees/avatars/${model.avatar}`;
     this.name = model.name;
     this.created_at = model.created_at;
     this.updated_at = model.updated_at;

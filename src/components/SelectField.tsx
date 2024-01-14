@@ -20,8 +20,11 @@ const SelectField: FC<SelectFieldType> = ({setValues, values, label}) => {
             return;
         }
         
+        setFieldValue('');
+
         if (values) {
             return setValues([...values, fieldValue]);
+            
         }
 
         setValues([fieldValue]);
@@ -39,6 +42,7 @@ const SelectField: FC<SelectFieldType> = ({setValues, values, label}) => {
                 id="adress"
                 label={label}
                 type="text"
+                value={fieldValue}
                 fullWidth
                 variant="standard"
                 onChange={(evt) => setFieldValue(evt.target.value)}

@@ -28,6 +28,11 @@ const EmployeeItem: FC<EmployeeItemType> = ({ employee, hasLink = true, deleteFu
   const onItemClick = () => {
     hasLink && history(`/employees/${id}`);
   };
+
+  const onDelete = (evt: any, id: number) => {
+    evt.stopPropagation();
+    deleteFunction(id)
+  };
   
   return (
     <ListItem
@@ -128,7 +133,7 @@ const EmployeeItem: FC<EmployeeItemType> = ({ employee, hasLink = true, deleteFu
               type="button"
               fullWidth
               variant="contained"
-              onClick={() => deleteFunction(id)}
+              onClick={(evt) => onDelete(evt, id)}
               sx={{ width: '100%', mt: 2 }}
             >
               Удалить

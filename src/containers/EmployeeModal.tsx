@@ -72,10 +72,16 @@ const EmployeeModal: FC<EmployeeModalType> = ({ employee, type, mutationFunction
       formData.append('foreign_level', foreignLevel?.join(separtor));
       formData.append('education', education?.join(separtor));
       formData.append('age', age.toString());
-      formData.append('company_id', company.id);
+
+      if (company?.id) {
+        formData.append('company_id', company?.id);
+      }
+      
 
       return sendEmployee(formData);
     };
+
+    const company_id = company?.id;
   
     const newEmployee = {
       name,
@@ -84,7 +90,7 @@ const EmployeeModal: FC<EmployeeModalType> = ({ employee, type, mutationFunction
       foreign_level: foreignLevel?.join(separtor),
       education: education?.join(separtor),
       age,
-      company_id: company.id,
+      company_id,
     };
 
     sendEmployee(newEmployee);

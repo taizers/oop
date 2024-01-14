@@ -31,7 +31,7 @@ const EmployeesContainer: FC = () => {
     company: id,
   });
 
-  const [deleteEmployee, { error: deletingError }] = employeesApiSlice.useDeleteEmployeeMutation();
+  const [updateEmployee, { error: deletingError }] = employeesApiSlice.useUpdateEmployeeMutation();
 
   useShowErrorToast(error);
   useShowErrorToast(deletingError);
@@ -61,6 +61,12 @@ const EmployeesContainer: FC = () => {
     }
     setPage(value - 1);
   };
+
+  const deleteEmployeeFromCompany = (id: number) => {
+    const employee = {company_id: null};
+
+    updateEmployee({employee, id});
+  }
 
 
   return (
@@ -97,7 +103,7 @@ const EmployeesContainer: FC = () => {
             }}
           >
             {employees.employees?.map((employee: EmployeeType, index: number) => (
-              <EmployeeItem hasLink={false} employee={employee} key={`employee ${index}`} deleteFunction={deleteEmployee} userId={user?.id} />
+              <EmployeeItem hasLink={false} employee={employee} key={`employee ${index}`} deleteFunction={deleteEmployeeFromCompany} userId={user?.id} />
             ))}
           </List>
         )}
