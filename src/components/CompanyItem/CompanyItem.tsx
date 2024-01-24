@@ -94,7 +94,7 @@ const CompanyItem: FC<CompanyItemType> = ({company, hasLink = true, deleteFuncti
               color="text.primary"
               key={'employees count'}
             >
-              Количество сотрудников: {employees_count}
+              Количество сотрудников: {employees_count || 0}
             </Typography>
             {userId && <Button
               type="button"

@@ -33,11 +33,12 @@ const CompanyModal: FC<CompanyModalType> = ({ company, type, mutationFunction, s
 
   const sendCompany = (newCompany: object | FormData) => {
     if (type === 'create') {
+      console.log('+++')
       return mutationFunction(newCompany);
     }
     
     if (type === 'update') {
-      return mutationFunction({ id: company?.id, employee: newCompany });
+      return mutationFunction({ id: company?.id, company: newCompany });
     }
   }
 
@@ -123,7 +124,7 @@ const CompanyModal: FC<CompanyModalType> = ({ company, type, mutationFunction, s
             autoFocus
             margin="dense"
             id="scope"
-            label="Напрвление деятельности"
+            label="Направление деятельности"
             type="text"
             fullWidth
             variant="standard"

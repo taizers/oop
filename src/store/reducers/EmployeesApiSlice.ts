@@ -27,6 +27,7 @@ export const employeesApiSlice = apiSlice.injectEndpoints({
         url: `/employees`,
         method: 'POST',
         body: employee,
+        formData: true,
       }),
       invalidatesTags: ['Employee'],
     }),

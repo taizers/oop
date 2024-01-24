@@ -25,6 +25,7 @@ export const companiesApiSlice = apiSlice.injectEndpoints({
         url: `/companies`,
         method: 'POST',
         body: company,
+        formData: true,
       }),
       invalidatesTags: ['Company'],
     }),
@@ -32,7 +33,8 @@ export const companiesApiSlice = apiSlice.injectEndpoints({
       query: ({ id, company }) => ({
         url: `/companies/${id}`,
         method: 'PUT',
-        body: { ...company },
+        body: company,
+        formData: true,
       }),
       invalidatesTags: ['Company'],
     }),

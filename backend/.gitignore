@@ -12,8 +12,8 @@ logs/
 *.py[cod]
 
 #storage
-/storage/covers/*
-/storage/books/*
+/storage/companies/avatars/*
+/storage/employees/avatars/*
 
 # Log files
 *.log

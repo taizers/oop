@@ -20,8 +20,8 @@ const Company: FC = () => {
 
   const { user } = useAppSelector((state) => state.auth);
 
-  const { data: company, error, isLoading } = companiesApiSlice.useGetCompanyQuery(id);
-  const [updateCompany, { data: updatedData, error: updatinError, isLoading: updatinIsLoading }] = companiesApiSlice.useUpdateCompanyMutation();
+  const { data: company, error } = companiesApiSlice.useGetCompanyQuery(id);
+  const [updateCompany, { data: updatedData, error: updatinError }] = companiesApiSlice.useUpdateCompanyMutation();
 
   useEffect(() => {
     if (updatedData) {
@@ -77,7 +77,10 @@ const Company: FC = () => {
             Юридитеский адрес: {company?.location}
           </Typography>
           <Typography component="h3" variant="h5">
-            Количество сотрудников: {company?.employees_count}
+            Количество сотрудников: {company?.employees_count || 0}
+          </Typography>
+          <Typography component="h3" variant="h5">
+            ФИО директора: {company?.ceo}
           </Typography>
         </Box>
         {user?.id && <Button

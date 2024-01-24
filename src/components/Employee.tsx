@@ -69,9 +69,9 @@ const Employee: FC = () => {
           <Typography component="h3" variant="h5">
             Дата рождения: {moment(employee?.age).format("DD.MM.YYYY")}
           </Typography>
-          <Typography component="h3" variant="h5">
+          {user?.id && <Typography component="h3" variant="h5">
             Адрес проживания: {employee?.adress}
-          </Typography>
+          </Typography>}
           <Typography component="h3" variant="h5">
             Компания: {employee?.company ? <Link to={`/companies/${employee?.company?.id}`}>{<Typography component="span" color="blue" >{employee?.company?.name}</Typography>}</Link> : 'Нет'}
           </Typography>
