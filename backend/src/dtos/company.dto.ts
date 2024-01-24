@@ -11,6 +11,7 @@ export default class CompanyDto {
   location;
   scope;
   ceo;
+  employees_count;
   created_at;
   updated_at;
   deleted_at;
@@ -21,6 +22,7 @@ export default class CompanyDto {
     this.location = model.location;
     this.scope = model.scope;
     this.ceo = model.ceo;
+    this.employees_count = model.employees_count?.toString();
     this.avatar = model.avatar && `storage/companies/avatars/${model.avatar}`;
     this.name = model.name;
     this.created_at = model.created_at;

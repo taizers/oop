@@ -16,6 +16,7 @@ export type CompanyType = {
     location: string;
     scope: string;
     ceo: string;
+    employees_count: string;
     avatar: string | null;
     created_at: Date;
     updated_at: Date;

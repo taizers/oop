@@ -45,7 +45,7 @@ export const  getPaginatedCompanies = async (page: number, limit: number, query:
 
   const totalPages = !count.length ? 1 : Math.ceil(count.length / limit);
 
-  const companiesDto = rows?.map((company: CompanyType) => ({...new CompanyDto(company)}));
+  const companiesDto = rows?.map((company: {dataValues: CompanyType}) => ({...new CompanyDto(company?.dataValues)}));
 
   return {
     totalPages,
@@ -81,7 +81,7 @@ export const  getCompany = async (where: object) => {
     group: ['company.id']
   });
 
-  return {...new CompanyDto(company)};
+  return {...new CompanyDto(company?.dataValues)};
 }
 
 export const  updateCompany = async (where: object, payload: object) => {
